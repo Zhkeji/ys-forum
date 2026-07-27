@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>超管后台 - YS论坛</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Inter','Noto Sans SC',sans-serif;background:#f0f2f5;color:#1d1d1f}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#d1d1d6;border-radius:3px}
+.sidebar{width:240px;background:#fff;border-right:1px solid #e5e5ea;position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:100}
+.sidebar-logo{padding:20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f2f2f7;font-weight:700;font-size:16px}
+.sidebar-nav{flex:1;padding:8px;overflow-y:auto}.nav-label{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;letter-spacing:0.5px;padding:16px 12px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;font-size:13px;color:#636366;cursor:pointer;transition:0.15s;margin-bottom:2px}
+.nav-item:hover{background:#f5f5f7;color:#1d1d1f}.nav-item.active{background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff}
+.nav-item i{width:18px;text-align:center;font-size:14px}
+.sidebar-footer{padding:8px;border-top:1px solid #f2f2f7}
+.main{margin-left:240px;min-height:100vh;background:#f0f2f5}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.9);backdrop-filter:blur(12px);border-bottom:1px solid #e5e5ea;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between}
+.content{padding:28px}.page{display:none}.page.active{display:block}
+.card{background:#fff;border-radius:14px;padding:20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:20px}
+.stat-card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.stat-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:10px}
+.stat-value{font-size:26px;font-weight:700}.stat-label{font-size:12px;color:#8e8e93}
+.data-table{width:100%;border-collapse:collapse;font-size:13px}.data-table th,.data-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #f2f2f7}.data-table th{font-size:11px;font-weight:600;color:#8e8e93;text-transform:uppercase;background:#fafafa}.data-table tr:hover{background:#fafafa}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:500}
+.badge-green{background:#e8fde8;color:#34c759}.badge-orange{background:#fff3e0;color:#ff9500}.badge-red{background:#fce4ec;color:#ff2d55}.badge-gray{background:#f2f2f7;color:#8e8e93}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;transition:0.15s}
+.btn-primary{background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff}.btn-danger{background:#ff3b5c;color:#fff}.btn-ghost{background:#f2f2f7;color:#1d1d1f}.btn-ghost:hover{background:#e5e5ea}.btn-sm{padding:4px 10px;font-size:11px}
+.form-group{margin-bottom:14px}.form-label{display:block;font-size:12px;font-weight:500;color:#636366;margin-bottom:4px}
+.form-input{width:100%;padding:9px 12px;border:1px solid #d1d1d6;border-radius:8px;font-size:13px;outline:none}.form-input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
+textarea.form-input{min-height:80px;resize:vertical;font-family:inherit}
+.actions{display:flex;gap:4px}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}.toggle input{opacity:0;width:0;height:0}.toggle .slider{position:absolute;cursor:pointer;inset:0;background:#ddd;border-radius:24px;transition:0.2s}.toggle .slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:0.2s}.toggle input:checked+.slider{background:#34c759}.toggle input:checked+.slider:before{transform:translateX(20px)}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center}.modal-bg.show{display:flex}
+.modal-box{background:#fff;border-radius:20px;padding:28px;max-width:460px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.15);animation:fadeUp 0.3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.toast-area{position:fixed;top:72px;right:24px;z-index:999;pointer-events:none}
+.toast-item{background:#fff;padding:10px 18px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s}
+@media(max-width:768px){.sidebar{transform:translateX(-100%);transition:transform 0.3s}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.content{padding:16px}.menu-btn{display:block!important}}</style>
+</head><body>
+<div id="loginPage" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);padding:20px">
+  <div style="background:#fff;border-radius:24px;padding:40px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);text-align:center">
+    <div style="font-size:48px;margin-bottom:12px">👑</div><h1 style="font-size:24px;margin-bottom:8px">超级管理员</h1><p style="color:#8e8e93;margin-bottom:28px">YS工作室论坛</p>
+    <input id="adminUser" style="width:100%;padding:12px 16px;border:1px solid #e5e5ea;border-radius:12px;font-size:14px;outline:none;margin-bottom:12px" placeholder="账号">
+    <input id="adminPass" type="password" style="width:100%;padding:12px 16px;border:1px solid #e5e5ea;border-radius:12px;font-size:14px;outline:none;margin-bottom:16px" placeholder="密码">
+    <button onclick="doLogin()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer">登录</button>
+    <p style="margin-top:16px;font-size:13px;color:#8e8e93">普通管理员请前往 <a href="/admin/admin/" style="color:#6366f1">管理员后台</a></p>
+  </div>
+</div>
+<div id="adminApp" style="display:none">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">👑 <span>超管后台</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">概览</div>
+      <div class="nav-item active" data-page="dashboard"><i class="fa-solid fa-chart-pie"></i>仪表盘</div>
+      <div class="nav-label">内容</div>
+      <div class="nav-item" data-page="posts"><i class="fa-solid fa-heart"></i>帖子管理</div>
+      <div class="nav-item" data-page="comments"><i class="fa-solid fa-comments"></i>评论管理</div>
+      <div class="nav-item" data-page="reports"><i class="fa-solid fa-flag"></i>举报处理</div>
+      <div class="nav-item" data-page="announcements"><i class="fa-solid fa-bullhorn"></i>公告管理</div>
+      <div class="nav-item" data-page="forums"><i class="fa-solid fa-list"></i>板块管理</div>
+      <div class="nav-label">用户</div>
+      <div class="nav-item" data-page="users"><i class="fa-solid fa-users"></i>用户管理</div>
+      <div class="nav-item" data-page="admins"><i class="fa-solid fa-user-shield"></i>管理员管理</div>
+      <div class="nav-item" data-page="chats"><i class="fa-solid fa-message"></i>私信管理</div>
+      <div class="nav-label">系统</div>
+      <div class="nav-item" data-page="settings"><i class="fa-solid fa-gear"></i>网站设置</div>
+      <div class="nav-item" data-page="sensitive"><i class="fa-solid fa-shield-halved"></i>敏感词</div>
+      <div class="nav-item" data-page="music"><i class="fa-solid fa-music"></i>音乐管理</div>
+      <div class="nav-item" data-page="links"><i class="fa-solid fa-link"></i>友链管理</div>
+      <div class="nav-item" data-page="feedback"><i class="fa-solid fa-comment-dots"></i>反馈管理</div>
+      <div class="nav-item" data-page="maintenance"><i class="fa-solid fa-wrench"></i>维护系统</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" onclick="window.open('/')"><i class="fa-solid fa-arrow-up-right-from-square"></i>访问前台</div>
+      <div class="nav-item" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i>退出</div>
+    </div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onclick="document.getElementById('sidebar').classList.toggle('open')" class="menu-btn" style="display:none;background:none;border:none;font-size:20px;cursor:pointer"><i class="fa-solid fa-bars"></i></button>
+        <span style="font-size:18px;font-weight:700" id="pageTitle">仪表盘</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px"><span id="adminName"></span><span style="font-size:11px;padding:2px 8px;border-radius:6px;background:#fce4ec;color:#e74c6f">👑 超管</span></div>
+    </header>
+    <div class="content">
+      <div class="page active" id="page-dashboard"><h2 style="font-size:20px;margin-bottom:20px">📊 仪表盘</h2><div class="stats-grid" id="statsGrid"></div><div class="card"><h3 style="font-size:16px;margin-bottom:14px">最新帖子</h3><div id="recentPosts"></div></div></div>
+      <div class="page" id="page-posts"><div style="display:flex;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px"><h2 style="font-size:20px">💕 帖子管理</h2><div style="display:flex;gap:8px"><select id="postFilter" onchange="loadPosts()" class="form-input" style="width:auto"><option value="">全部</option><option value="published">已发布</option><option value="pending">待审核</option><option value="hidden">已隐藏</option></select></div></div><div class="card"><div id="postsTable"></div></div><div id="postsPag" style="display:flex;justify-content:center;gap:6px;margin-top:16px"></div></div>
+      <div class="page" id="page-comments"><h2 style="font-size:20px;margin-bottom:20px">💬 评论管理</h2><div class="card"><div id="commentsTable"></div></div></div>
+      <div class="page" id="page-reports"><h2 style="font-size:20px;margin-bottom:20px">🚩 举报处理</h2><div class="card"><div id="reportsTable"></div></div></div>
+      <div class="page" id="page-announcements"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><h2 style="font-size:20px">📢 公告管理</h2><button class="btn btn-primary" onclick="showAddAnn()"><i class="fa-solid fa-plus"></i> 发布公告</button></div><div class="card"><div id="annTable"></div></div></div>
+      <div class="page" id="page-forums"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><h2 style="font-size:20px">📋 板块管理</h2><button class="btn btn-primary" onclick="showAddForum()"><i class="fa-solid fa-plus"></i> 新增板块</button></div><div class="card"><div id="forumsTable"></div></div></div>
+      <div class="page" id="page-users"><div style="display:flex;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px"><h2 style="font-size:20px">👥 用户管理</h2><div style="display:flex;gap:8px"><select id="userFilter" onchange="loadUsers()" class="form-input" style="width:auto"><option value="">全部</option><option value="user">用户</option><option value="admin">管理员</option></select><input id="userSearch" placeholder="搜索..." class="form-input" style="width:160px" oninput="debounce(loadUsers,500)()"></div></div><div class="card"><div id="usersTable"></div></div></div>
+      <div class="page" id="page-admins"><div style="display:flex;justify-content:space-between;margin-bottom:20px"><h2 style="font-size:20px">🛡️ 管理员管理</h2><button class="btn btn-primary" onclick="showAddAdmin()"><i class="fa-solid fa-plus"></i> 添加管理员</button></div><div class="card"><div id="adminsTable"></div></div></div>
+      <div class="page" id="page-chats"><h2 style="font-size:20px;margin-bottom:20px">💬 私信管理</h2><div class="card"><div id="chatsTable"></div></div><div id="chatDetail" class="card" style="display:none;margin-top:16px"><h3 style="font-size:16px;margin-bottom:12px">会话详情</h3><div id="chatMessages" style="max-height:300px;overflow-y:auto;margin-bottom:12px"></div><div style="display:flex;gap:8px"><input id="interveneInput" class="form-input" placeholder="输入管理员消息..." style="flex:1"><button class="btn btn-primary" onclick="sendIntervene()">介入</button></div></div></div>
+      <div class="page" id="page-settings"><h2 style="font-size:20px;margin-bottom:20px">⚙️ 网站设置</h2><div class="card" style="max-width:600px"><div class="form-group"><label class="form-label">网站LOGO</label><div style="display:flex;gap:12px;align-items:center"><img id="logoPreview" src="/img/logo.png" style="width:48px;height:48px;border-radius:12px;object-fit:cover"><input id="setLogo" class="form-input" placeholder="LOGO路径"></div></div><div class="form-group"><label class="form-label">网站名称</label><input id="setSiteName" class="form-input"></div><div class="form-group"><label class="form-label">网站描述</label><input id="setSiteDesc" class="form-input"></div><div class="form-group"><label class="form-label">页脚文字</label><input id="setFooter" class="form-input"></div><div class="form-check" style="margin-bottom:10px"><label style="display:flex;align-items:center;gap:8px;font-size:14px"><input type="checkbox" id="setAllowReg" style="accent-color:#6366f1"> 允许注册</label></div><div class="form-check" style="margin-bottom:10px"><label style="display:flex;align-items:center;gap:8px;font-size:14px"><input type="checkbox" id="setPostReview" style="accent-color:#6366f1"> 帖子需审核</label></div><button class="btn btn-primary" onclick="saveSettings()">保存设置</button></div></div>
+      <div class="page" id="page-sensitive"><h2 style="font-size:20px;margin-bottom:20px">🛡️ 敏感词管理</h2><div class="card"><div style="display:flex;gap:8px;margin-bottom:16px"><input id="newWord" class="form-input" placeholder="敏感词" style="flex:1"><input id="newReplacement" class="form-input" placeholder="替换词 (默认***)" style="width:120px"><button class="btn btn-primary" onclick="addSensitiveWord()">添加</button></div><div id="wordsTable"></div></div></div>
+      <div class="page" id="page-music"><h2 style="font-size:20px;margin-bottom:20px">🎵 音乐管理</h2><div class="card"><div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"><input id="mTitle" class="form-input" placeholder="歌名" style="flex:1;min-width:120px"><input id="mArtist" class="form-input" placeholder="歌手" style="flex:1;min-width:120px"><input id="mUrl" class="form-input" placeholder="音乐URL" style="flex:2;min-width:200px"><button class="btn btn-primary" onclick="addMusic()">添加</button></div><div id="musicTable"></div></div></div>
+      <div class="page" id="page-links"><h2 style="font-size:20px;margin-bottom:20px">🔗 友链管理</h2><div class="card"><div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"><input id="lName" class="form-input" placeholder="名称" style="flex:1;min-width:100px"><input id="lUrl" class="form-input" placeholder="URL" style="flex:2;min-width:160px"><button class="btn btn-primary" onclick="addLink()">添加</button></div><div id="linksTable"></div></div></div>
+      <div class="page" id="page-feedback"><h2 style="font-size:20px;margin-bottom:20px">📝 反馈管理</h2><div class="card"><div id="feedbackTable"></div></div></div>
+    </div>
+  </main>
+</div>
+<div class="modal-bg" id="addAnnModal" onclick="this.classList.remove('show')"><div class="modal-box" onclick="event.stopPropagation()"><h3 style="font-size:18px;margin-bottom:16px">发布公告</h3><div class="form-group"><label class="form-label">标题</label><input id="annTitle" class="form-input"></div><div class="form-group"><label class="form-label">内容</label><textarea id="annContent" class="form-input"></textarea></div><div style="display:flex;gap:12px;margin-bottom:14px"><select id="annType" class="form-input" style="width:auto"><option value="info">📢 普通</option><option value="urgent">🚨 紧急</option><option value="update">✨ 更新</option></select><label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="annPin"> 置顶</label><label style="display:flex;align-items:center;gap:6px;font-size:13px"><input type="checkbox" id="annPopup"> 弹窗</label></div><button class="btn btn-primary" onclick="addAnn()" style="width:100%">发布</button></div></div>
+<div class="modal-bg" id="addForumModal" onclick="this.classList.remove('show')"><div class="modal-box" onclick="event.stopPropagation()"><h3 style="font-size:18px;margin-bottom:16px">新增板块</h3><div class="form-group"><label class="form-label">名称</label><input id="forumName" class="form-input"></div><div class="form-group"><label class="form-label">描述</label><input id="forumDesc" class="form-input"></div><div class="form-group"><label class="form-label">图标 (Emoji)</label><input id="forumIcon" class="form-input" value="💬"></div><button class="btn btn-primary" onclick="addForum()" style="width:100%">创建</button></div></div>
+<div class="modal-bg" id="addAdminModal" onclick="this.classList.remove('show')"><div class="modal-box" onclick="event.stopPropagation()"><h3 style="font-size:18px;margin-bottom:16px">添加管理员</h3><div class="form-group"><label class="form-label">用户名</label><input id="newAdminUser" class="form-input"></div><div class="form-group"><label class="form-label">密码</label><input id="newAdminPass" type="password" class="form-input"></div><div class="form-group"><label class="form-label">昵称</label><input id="newAdminNick" class="form-input"></div><button class="btn btn-primary" onclick="addAdmin()" style="width:100%">创建</button></div></div>
+<!-- 权限管理弹窗 -->
+<div class="modal-bg" id="permModal" onclick="this.classList.remove('show')">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:500px">
+    <h3 style="font-size:18px;margin-bottom:6px">🛡️ 管理员权限设置</h3>
+    <p id="permAdminName" style="font-size:13px;color:#8e8e93;margin-bottom:20px"></p>
+    <div id="permCheckboxes" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px"></div>
+    <button class="btn btn-primary" onclick="savePermissions()" style="width:100%">保存权限</button>
+  </div>
+</div>
+<div class="toast-area" id="toastArea"></div>
+<script>
+var API='',TOKEN=localS…tem('admin_token')||null,adminUser=null;
+document.querySelectorAll('.nav-item[data-page]').forEach(function(n){n.addEventListener('click',function(){document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});n.classList.add('active');document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});document.getElementById('page-'+n.dataset.page).classList.add('active');document.getElementById('pageTitle').textContent=n.textContent.trim();loadPage(n.dataset.page);document.getElementById('sidebar').classList.remove('open');});});
+
+function doLogin(){var u=document.getElementById('adminUser').value,p=document.getElementById('adminPass').value;if(!u||!p)return showT('请输入账号密码','error');api('POST','/api/auth/login',{username:u,password:p},function(err,d){if(err){showT(err,'error');return;}if(d.user.role!=='super_admin'){showT('仅限超级管理员','error');return;}TOKEN=***adminUser=d.user;localStorage.setItem('admin_token',TOKEN);showApp();});}
+function showApp(){document.getElementById('loginPage').style.display='none';document.getElementById('adminApp').style.display='block';document.getElementById('adminName').textContent=adminUser.nickname;loadPage('dashboard');}
+function logout(){TOKEN=***adminUser=null;localStorage.removeItem('admin_token');location.reload();}
+function loadPage(p){var fn={dashboard:loadDashboard,posts:loadPosts,comments:loadComments,reports:loadReports,announcements:loadAnn,forums:loadForums,users:loadUsers,admins:loadAdmins,chats:loadChats,settings:loadSettings,sensitive:loadSensitive,music:loadMusic,links:loadLinks,feedback:loadFeedback};if(fn[p])fn[p]();}
+
+function loadDashboard(){api('GET','/api/admin/stats',null,function(err,d){if(err)return;var s=d.stats;document.getElementById('statsGrid').innerHTML='<div class="stat-card"><div class="stat-icon" style="background:#e8f4fd;color:#6366f1"><i class="fa-solid fa-users"></i></div><div class="stat-value">'+s.totalUsers+'</div><div class="stat-label">用户</div></div><div class="stat-card"><div class="stat-icon" style="background:#fce4ec;color:#ec4899"><i class="fa-solid fa-heart"></i></div><div class="stat-value">'+s.totalPosts+'</div><div class="stat-label">帖子</div></div><div class="stat-card"><div class="stat-icon" style="background:#e8fde8;color:#34c759"><i class="fa-solid fa-comments"></i></div><div class="stat-value">'+s.totalComments+'</div><div class="stat-label">评论</div></div><div class="stat-card"><div class="stat-icon" style="background:#fff3e0;color:#ff9500"><i class="fa-solid fa-clock"></i></div><div class="stat-value">'+s.todayPosts+'</div><div class="stat-label">今日</div></div><div class="stat-card"><div class="stat-icon" style="background:#fce4ec;color:#ff3b5c"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="stat-value">'+s.pendingReview+'</div><div class="stat-label">待审</div></div><div class="stat-card"><div class="stat-icon" style="background:#e8f4fd;color:#6366f1"><i class="fa-solid fa-flag"></i></div><div class="stat-value">'+s.pendingReports+'</div><div class="stat-label">举报</div></div>';
+    document.getElementById('recentPosts').innerHTML=d.recentPosts.length?'<table class="data-table"><thead><tr><th>标题</th><th>作者</th><th>状态</th><th>时间</th></tr></thead><tbody>'+d.recentPosts.map(function(p){return '<tr><td>'+esc(p.title)+'</td><td>'+esc(p.nickname)+'</td><td><span class="badge '+(p.status==='published'?'badge-green':p.status==='pending'?'badge-orange':'badge-gray')+'">'+p.status+'</span></td><td>'+fmtDate(p.created_at)+'</td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+
+var pp=1;function loadPosts(page){if(!page)page=1;pp=page;var st=document.getElementById('postFilter').value;var url='/api/admin/posts?page='+page+'&limit=15';if(st)url+='&status='+st;api('GET',url,null,function(err,d){if(err)return;document.getElementById('postsTable').innerHTML='<table class="data-table"><thead><tr><th>标题</th><th>作者</th><th>状态</th><th>👍</th><th>💬</th><th>👁</th><th>操作</th></tr></thead><tbody>'+d.posts.map(function(p){return '<tr><td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(p.title)+'</td><td>'+esc(p.author_name||'')+'</td><td><span class="badge '+(p.status==='published'?'badge-green':p.status==='pending'?'badge-orange':'badge-gray')+'">'+p.status+'</span></td><td>'+p.likes+'</td><td>'+p.comments_count+'</td><td>'+p.views+'</td><td class="actions">'+(p.status==='pending'?'<button class="btn btn-sm btn-primary" onclick="updatePost(\''+p.id+'\',\'published\')">通过</button>':'')+(p.status==='published'?'<button class="btn btn-sm btn-ghost" onclick="updatePost(\''+p.id+'\',\'hidden\')">隐藏</button>':'')+(p.status==='hidden'?'<button class="btn btn-sm btn-primary" onclick="updatePost(\''+p.id+'\',\'published\')">显示</button>':'')+'<button class="btn btn-sm btn-ghost" onclick="pinPost(\''+p.id+'\','+(p.is_pinned?0:1)+')">'+(p.is_pinned?'取消置顶':'置顶')+'</button><button class="btn btn-sm btn-ghost" onclick="essPost(\''+p.id+'\','+(p.is_essence?0:1)+')">'+(p.is_essence?'取消精华':'精华')+'</button><button class="btn btn-sm btn-danger" onclick="deletePost(\''+p.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>';renderPag('postsPag',d.pagination,'loadPosts');});}
+function updatePost(id,st){api('PUT','/api/admin/posts/'+id+'/status',{status:st},function(err){if(err)return showT(err,'error');showT('已更新');loadPosts(pp);});}
+function pinPost(id,v){api('PUT','/api/admin/posts/'+id+'/pin',{pinned:v},function(err){if(err)return showT(err,'error');showT(v?'已置顶':'已取消');loadPosts(pp);});}
+function essPost(id,v){api('PUT','/api/admin/posts/'+id+'/essence',{essence:v},function(err){if(err)return showT(err,'error');showT(v?'已加精':'已取消');loadPosts(pp);});}
+function deletePost(id){if(!confirm('确定删除？'))return;api('DELETE','/api/admin/posts/'+id,null,function(err){if(err)return showT(err,'error');showT('已删除');loadPosts(pp);});}
+
+function loadComments(){api('GET','/api/admin/comments?limit=20',null,function(err,d){if(err)return;document.getElementById('commentsTable').innerHTML=d.comments.length?'<table class="data-table"><thead><tr><th>内容</th><th>作者</th><th>帖子</th><th>操作</th></tr></thead><tbody>'+d.comments.map(function(c){return '<tr><td style="max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(c.content)+'</td><td>'+esc(c.author_name)+'</td><td>'+esc(c.post_title||'')+'</td><td><button class="btn btn-sm btn-danger" onclick="deleteComment(\''+c.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+function deleteComment(id){if(!confirm('确定？'))return;api('DELETE','/api/admin/comments/'+id,null,function(err){if(err)return;showT('已删除');loadComments();});}
+
+function loadReports(){api('GET','/api/admin/reports',null,function(err,d){if(err)return;document.getElementById('reportsTable').innerHTML=d.reports.length?'<table class="data-table"><thead><tr><th>举报人</th><th>原因</th><th>时间</th><th>操作</th></tr></thead><tbody>'+d.reports.map(function(r){return '<tr><td>'+esc(r.reporter_name)+'</td><td>'+esc(r.reason)+'</td><td>'+fmtDate(r.created_at)+'</td><td class="actions"><button class="btn btn-sm btn-primary" onclick="resolveReport(\''+r.id+'\',\'resolved\')">处理</button><button class="btn btn-sm btn-ghost" onclick="resolveReport(\''+r.id+'\',\'dismissed\')">驳回</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+function resolveReport(id,st){api('PUT','/api/admin/reports/'+id,{status:st},function(err){if(err)return;showT('已处理');loadReports();});}
+
+function loadAnn(){api('GET','/api/admin/announcements',null,function(err,d){if(err)return;document.getElementById('annTable').innerHTML=d.announcements.length?'<table class="data-table"><thead><tr><th>标题</th><th>类型</th><th>置顶</th><th>弹窗</th><th>操作</th></tr></thead><tbody>'+d.announcements.map(function(a){return '<tr><td>'+esc(a.title)+'</td><td>'+(a.type==='urgent'?'🚨':'📢')+'</td><td>'+(a.is_pinned?'📌':'-')+'</td><td>'+(a.show_popup?'🔔':'-')+'</td><td><button class="btn btn-sm btn-danger" onclick="deleteAnn(\''+a.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+function showAddAnn(){document.getElementById('addAnnModal').classList.add('show');}
+function addAnn(){var t=document.getElementById('annTitle').value,c=document.getElementById('annContent').value;if(!t||!c)return showT('请填写完整','error');api('POST','/api/admin/announcements',{title:t,content:c,type:document.getElementById('annType').value,is_pinned:document.getElementById('annPin').checked,show_popup:document.getElementById('annPopup').checked},function(err){if(err)return showT(err,'error');document.getElementById('addAnnModal').classList.remove('show');showT('已发布');loadAnn();});}
+function deleteAnn(id){if(!confirm('确定？'))return;api('DELETE','/api/admin/announcements/'+id,null,function(err){if(err)return;showT('已删除');loadAnn();});}
+
+function loadForums(){api('GET','/api/admin/forums',null,function(err,d){if(err)return;document.getElementById('forumsTable').innerHTML='<table class="data-table"><thead><tr><th>图标</th><th>名称</th><th>描述</th><th>状态</th><th>操作</th></tr></thead><tbody>'+d.forums.map(function(f){return '<tr><td>'+esc(f.icon)+'</td><td>'+esc(f.name)+'</td><td>'+esc(f.description)+'</td><td><span class="badge '+(f.status==='active'?'badge-green':'badge-gray')+'">'+f.status+'</span></td><td><button class="btn btn-sm btn-danger" onclick="deleteForum(\''+f.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>';});}
+function showAddForum(){document.getElementById('addForumModal').classList.add('show');}
+function addForum(){var n=document.getElementById('forumName').value,d=document.getElementById('forumDesc').value,i=document.getElementById('forumIcon').value;if(!n)return showT('请输入名称','error');api('POST','/api/admin/forums',{name:n,description:d,icon:i},function(err){if(err)return showT(err,'error');document.getElementById('addForumModal').classList.remove('show');showT('已创建');loadForums();});}
+function deleteForum(id){if(!confirm('确定？'))return;api('DELETE','/api/admin/forums/'+id,null,function(err){if(err)return;showT('已删除');loadForums();});}
+
+function loadUsers(){api('GET','/api/admin/users?limit=20',null,function(err,d){if(err)return;document.getElementById('usersTable').innerHTML='<table class="data-table"><thead><tr><th>用户名</th><th>昵称</th><th>角色</th><th>积分</th><th>状态</th><th>操作</th></tr></thead><tbody>'+d.admins.map(function(u){return '<tr><td>'+esc(u.username)+'</td><td>'+esc(u.nickname)+'</td><td>'+(u.role==='super_admin'?'👑超管':u.role==='admin'?'🔧管理':'👤用户')+'</td><td>'+u.points+'</td><td><span class="badge '+(u.status==='active'?'badge-green':'badge-red')+'">'+u.status+'</span></td><td class="actions">'+(u.id!==adminUser.id?'<button class="btn btn-sm btn-ghost" onclick="toggleUser(\''+u.id+'\',\''+(u.status==='active'?'banned':'active')+'\')">'+(u.status==='active'?'封禁':'解封')+'</button><button class="btn btn-sm btn-ghost" onclick="resetPwd(\''+u.id+'\')">重置密码</button>':'-')+'</td></tr>';}).join('')+'</tbody></table>';});}
+function toggleUser(id,st){api('PUT','/api/admin/users/'+id+'/status',{status:st,reason:'管理员操作'},function(err){if(err)return showT(err,'error');showT(st==='banned'?'已封禁':'已解封');loadUsers();});}
+function resetPwd(id){var p=prompt('输入新密码:');if(!p||p.length<6)return showT('密码至少6位','error');api('PUT','/api/admin/users/'+id+'/reset-password',{newPassword:p},function(err){if(err)return showT(err,'error');showT('密码已重置');});}
+
+function loadAdmins(){api('GET','/api/admin/admins/list',null,function(err,d){if(err)return;document.getElementById('adminsTable').innerHTML=d.admins.length?'<table class="data-table"><thead><tr><th>用户名</th><th>昵称</th><th>当前权限</th><th>操作</th></tr></thead><tbody>'+d.admins.map(function(u){
+    var perms = u.permissions || [];
+    var permBadges = perms.length > 0 ? perms.map(function(p){return '<span style="font-size:10px;padding:1px 6px;background:#e8f4fd;color:#5e5ce6;border-radius:4px;margin-right:2px">'+permLabel(p)+'</span>';}).join('') : '<span style="font-size:11px;color:#8e8e93">无权限</span>';
+    return '<tr><td>'+esc(u.username)+'</td><td>'+esc(u.nickname)+'</td><td>'+permBadges+'</td><td><button class="btn btn-sm btn-primary" onclick="showPermModal(\''+u.id+'\',\''+esc(u.nickname)+'\')">设置权限</button> <button class="btn btn-sm btn-ghost" onclick="changeRole(\''+u.id+'\',\'user\')">取消管理</button></td></tr>';
+  }).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无管理员</p>';});}
+function showAddAdmin(){document.getElementById('addAdminModal').classList.add('show');}
+function addAdmin(){var u=document.getElementById('newAdminUser').value,p=document.getElementById('newAdminPass').value,n=document.getElementById('newAdminNick').value;if(!u||!p||!n)return showT('请填写完整','error');api('POST','/api/admin/users/admin',{username:u,password:p,nickname:n},function(err){if(err)return showT(err,'error');document.getElementById('addAdminModal').classList.remove('show');showT('已添加');loadAdmins();});}
+function changeRole(id,role){api('PUT','/api/admin/users/'+id+'/role',{role:role},function(err){if(err)return showT(err,'error');showT('已更新');loadAdmins();});}
+
+var currentChatConvId=null;
+function loadChats(){api('GET','/api/chat/conversations',null,function(err,d){if(err)return;document.getElementById('chatsTable').innerHTML=d.conversations.length?'<table class="data-table"><thead><tr><th>用户1</th><th>用户2</th><th>最后消息</th><th>操作</th></tr></thead><tbody>'+d.conversations.map(function(c){return '<tr><td>'+esc(c.user1_name||'')+'</td><td>'+esc(c.user2_name||'')+'</td><td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(c.last_message||'')+'</td><td><button class="btn btn-sm btn-primary" onclick="viewChat(\''+c.id+'\')">查看</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无私信</p>';});}
+function viewChat(id){currentChatConvId=id;api('GET','/api/chat/conversations/'+id+'/messages',null,function(err,d){if(err)return;document.getElementById('chatDetail').style.display='block';document.getElementById('chatMessages').innerHTML=d.messages.map(function(m){return '<div style="margin-bottom:6px;'+(m.type==='system'?'text-align:center':'')+'"><div style="display:inline-block;padding:6px 12px;border-radius:10px;'+(m.type==='system'?'background:#fff3e0;color:#ff9500;font-size:11px':'background:#f2f2f7;color:#1d1d1f;font-size:13px')+'">'+(m.type==='system'?'🔒 系统消息':'<b>'+esc(m.sender_name)+'</b>: '+esc(m.content))+'</div></div>';}).join('');});}
+function sendIntervene(){var input=document.getElementById('interveneInput'),content=input.value.trim();if(!content||!currentChatConvId)return;api('POST','/api/chat/conversations/'+currentChatConvId+'/intervene',{content:content},function(err){if(err)return showT(err,'error');input.value='';showT('已介入');viewChat(currentChatConvId);});}
+
+function loadSettings(){api('GET','/api/admin/settings',null,function(err,d){if(err)return;var s=d.settings;document.getElementById('setLogo').value=s.siteLogo||'';document.getElementById('logoPreview').src=s.siteLogo||'/img/logo.png';document.getElementById('setSiteName').value=s.siteName||'';document.getElementById('setSiteDesc').value=s.siteDescription||'';document.getElementById('setFooter').value=s.siteFooter||'';document.getElementById('setAllowReg').checked=s.allowRegister==='true';document.getElementById('setPostReview').checked=s.postReview==='true';});}
+function saveSettings(){api('PUT','/api/admin/settings',{siteLogo:document.getElementById('setLogo').value,siteName:document.getElementById('setSiteName').value,siteDescription:document.getElementById('setSiteDesc').value,siteFooter:document.getElementById('setFooter').value,allowRegister:String(document.getElementById('setAllowReg').checked),postReview:String(document.getElementById('setPostReview').checked)},function(err){if(err)return showT(err,'error');showT('已保存');});}
+
+function loadSensitive(){api('GET','/api/admin/sensitive-words',null,function(err,d){if(err)return;document.getElementById('wordsTable').innerHTML=d.words.length?'<table class="data-table"><thead><tr><th>敏感词</th><th>替换词</th><th>操作</th></tr></thead><tbody>'+d.words.map(function(w){return '<tr><td>'+esc(w.word)+'</td><td>'+esc(w.replacement)+'</td><td><button class="btn btn-sm btn-danger" onclick="deleteWord(\''+w.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+function addSensitiveWord(){var w=document.getElementById('newWord').value.trim(),r=document.getElementById('newReplacement').value.trim()||'***';if(!w)return;api('POST','/api/admin/sensitive-words',{word:w,replacement:r},function(err){if(err)return showT(err,'error');showT('已添加');document.getElementById('newWord').value='';loadSensitive();});}
+function deleteWord(id){api('DELETE','/api/admin/sensitive-words/'+id,null,function(err){if(err)return;showT('已删除');loadSensitive();});}
+
+function loadMusic(){api('GET','/api/admin/music',null,function(err,d){if(err)return;document.getElementById('musicTable').innerHTML=d.music.length?'<table class="data-table"><thead><tr><th>歌名</th><th>歌手</th><th>操作</th></tr></thead><tbody>'+d.music.map(function(m){return '<tr><td>'+esc(m.title)+'</td><td>'+esc(m.artist)+'</td><td><button class="btn btn-sm btn-danger" onclick="deleteMusic(\''+m.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+function addMusic(){var t=document.getElementById('mTitle').value,a=document.getElementById('mArtist').value,u=document.getElementById('mUrl').value;if(!t||!u)return showT('请填写歌名和URL','error');api('POST','/api/admin/music',{title:t,artist:a,url:u},function(err){if(err)return showT(err,'error');showT('已添加');loadMusic();});}
+function deleteMusic(id){api('DELETE','/api/admin/music/'+id,null,function(err){if(err)return;showT('已删除');loadMusic();});}
+
+function loadLinks(){api('GET','/api/admin/friend-links',null,function(err,d){if(err)return;document.getElementById('linksTable').innerHTML=d.links.length?'<table class="data-table"><thead><tr><th>名称</th><th>URL</th><th>操作</th></tr></thead><tbody>'+d.links.map(function(l){return '<tr><td>'+esc(l.name)+'</td><td>'+esc(l.url)+'</td><td><button class="btn btn-sm btn-danger" onclick="deleteLink(\''+l.id+'\')">删除</button></td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+function addLink(){var n=document.getElementById('lName').value,u=document.getElementById('lUrl').value;if(!n||!u)return showT('请填写完整','error');api('POST','/api/admin/friend-links',{name:n,url:u},function(err){if(err)return showT(err,'error');showT('已添加');loadLinks();});}
+function deleteLink(id){api('DELETE','/api/admin/friend-links/'+id,null,function(err){if(err)return;showT('已删除');loadLinks();});}
+
+function loadFeedback(){api('GET','/api/admin/feedback',null,function(err,d){if(err)return;document.getElementById('feedbackTable').innerHTML=d.feedback.length?'<table class="data-table"><thead><tr><th>用户</th><th>内容</th><th>联系方式</th><th>状态</th><th>时间</th></tr></thead><tbody>'+d.feedback.map(function(f){return '<tr><td>'+(f.nickname||'匿名')+'</td><td>'+esc(f.content)+'</td><td>'+esc(f.contact||'-')+'</td><td><span class="badge '+(f.status==='resolved'?'badge-green':'badge-orange')+'">'+f.status+'</span></td><td>'+fmtDate(f.created_at)+'</td></tr>';}).join('')+'</tbody></table>':'<p style="color:#8e8e93;text-align:center;padding:20px">暂无</p>';});}
+
+function api(m,u,d,cb){var h={'Content-Type':'application/json'};if(TOKEN)h['Authorization']='Bearer '+TOKEN;var r=new XMLHttpRequest();r.open(m,u,true);for(var k in h)r.setRequestHeader(k,h[k]);r.onreadystatechange=function(){if(r.readyState===4)try{var j=JSON.parse(r.responseText);if(r.status>=200&&r.status<300)cb(null,j);else cb(j.error||'失败');}catch(e){cb('解析失败');}};r.onerror=function(){cb('网络错误');};r.send(d?JSON.stringify(d):null);}
+function renderPag(id,pag,fn){var c=document.getElementById(id);if(!pag||pag.totalPages<=1){c.innerHTML='';return;}var h='';if(pag.page>1)h+='<button class="btn btn-sm btn-ghost" onclick="'+fn+'('+(pag.page-1)+')">上页</button>';for(var i=Math.max(1,pag.page-2);i<=Math.min(pag.totalPages,pag.page+2);i++)h+='<button class="btn btn-sm '+(i===pag.page?'btn-primary':'btn-ghost')+'" onclick="'+fn+'('+i+')">'+i+'</button>';if(pag.page<pag.totalPages)h+='<button class="btn btn-sm btn-ghost" onclick="'+fn+'('+(pag.page+1)+')">下页</button>';c.innerHTML=h;}
+function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function fmtDate(s){if(!s)return '-';return new Date(s+(s.indexOf('Z')>=0?'':'Z')).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
+var _permAdminId = null;
+var allPerms = [
+  {key:'posts',label:'帖子管理',icon:'💕'},
+  {key:'comments',label:'评论管理',icon:'💬'},
+  {key:'reports',label:'举报处理',icon:'🚩'},
+  {key:'chats',label:'私信管理',icon:'💌'},
+  {key:'announcements',label:'公告管理',icon:'📢'},
+  {key:'forums',label:'板块管理',icon:'📋'},
+  {key:'users',label:'用户管理',icon:'👥'},
+  {key:'sensitive',label:'敏感词',icon:'🛡️'},
+  {key:'music',label:'音乐管理',icon:'🎵'},
+  {key:'links',label:'友链管理',icon:'🔗'},
+  {key:'feedback',label:'反馈管理',icon:'📝'}
+];
+
+function permLabel(key){
+  var found = allPerms.find(function(p){return p.key===key;});
+  return found ? found.label : key;
+}
+
+function showPermModal(adminId, adminName){
+  _permAdminId = adminId;
+  document.getElementById('permAdminName').textContent = '管理员: ' + adminName;
+  // 获取当前权限
+  api('GET','/api/admin/admins/'+adminId+'/permissions',null,function(err,d){
+    var currentPerms = d && d.permissions ? d.permissions : [];
+    var html = '';
+    allPerms.forEach(function(p){
+      var checked = currentPerms.includes(p.key) ? 'checked' : '';
+      html += '<label style="display:flex;align-items:center;gap:8px;padding:10px;background:#f8f9fa;border-radius:10px;cursor:pointer;font-size:13px"><input type="checkbox" value="'+p.key+'" '+checked+' style="accent-color:#6366f1"><span>'+p.icon+' '+p.label+'</span></label>';
+    });
+    document.getElementById('permCheckboxes').innerHTML = html;
+    document.getElementById('permModal').classList.add('show');
+  });
+}
+
+function savePermissions(){
+  var checkboxes = document.querySelectorAll('#permCheckboxes input[type="checkbox"]');
+  var perms = [];
+  checkboxes.forEach(function(cb){if(cb.checked)perms.push(cb.value);});
+  api('PUT','/api/admin/admins/'+_permAdminId+'/permissions',{permissions:perms},function(err){
+    if(err)return showT(err,'error');
+    showT('权限已更新');
+    document.getElementById('permModal').classList.remove('show');
+    loadAdmins();
+  });
+}
+
+function showT(m,t),d=document.createElement('div');d.className='toast-item';d.innerHTML='<i class="fa-solid fa-circle-'+(t==='success'?'check':'exclamation')+'" style="color:'+(t==='success'?'#34c759':'#ff3b5c')+';margin-right:6px"></i>'+m;c.appendChild(d);setTimeout(function(){d.style.opacity='0';setTimeout(function(){d.remove();},300);},3000);}
+function debounce(fn,ms){var t;return function(){clearTimeout(t);t=setTimeout(fn,ms);};}
+if(TOKEN)api('GET','/api/auth/me',null,function(err,d){if(err||!d.user||d.user.role!=='super_admin'){localStorage.removeItem('admin_token');TOKEN=***else{adminUser=d.user;showApp();}});
+</script></body></html>
