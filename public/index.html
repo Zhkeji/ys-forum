@@ -425,7 +425,7 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         </div>
       </div>
 
-      <div style="text-align:center;font-size:11px;color:var(--text-light);padding:8px">© 2026 YS工作室论坛</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-light);padding:8px" id="siteFooter">© 2026 YS工作室论坛</div>
     </div>
   </div>
 </div>
@@ -570,7 +570,7 @@ function enterSite(){
     $('sbPoints').textContent=USER.points||0;
     $('sbLevel').textContent=USER.level||1;
   }
-  loadForums();loadPosts(true);loadSidebar();loadAnnouncements();loadPopupAnn();
+  loadForums();loadPosts(true);loadSidebar();loadAnnouncements();loadPopupAnn();loadSiteFooter();
 }
 
 function doCheckin(){
@@ -737,6 +737,7 @@ function loadSidebar(){
   api('GET','/api/friend-links',null,function(err,d){if(err||!d.links.length)return;var h='';d.links.forEach(function(l){h+='<div class="link-item"><img src="'+(l.logo||'/img/logo.png')+'"><a href="'+esc(l.url)+'" target="_blank">'+esc(l.name)+'</a></div>';});$('friendLinks').innerHTML=h;});
 }
 
+function loadSiteFooter(){api('GET','/api/admin/settings',null,function(err,d){if(!err&&d.settings&&d.settings.siteFooter){$('siteFooter').textContent=d.settings.siteFooter;}});}
 function loadAnnouncements(){
   api('GET','/api/announcements?limit=5',null,function(err,d){
     if(err||!d.announcements.length)return;
