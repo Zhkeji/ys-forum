@@ -111,10 +111,10 @@
 </div>
 <div id="toastArea" style="position:fixed;top:68px;right:20px;z-index:999;pointer-events:none"></div>
 <script>
-var API='',TOKEN=localS…tem('admin_token')||null,adminUser=null;
+var API='',TOKEN=localStorage.getItem('admin_token')||null,adminUser=null;
 document.querySelectorAll('.nav-item[data-page]').forEach(function(n){n.addEventListener('click',function(){document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});n.classList.add('active');document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});document.getElementById('page-'+n.dataset.page).classList.add('active');document.getElementById('pageTitle').textContent=n.textContent.trim();loadPage(n.dataset.page);document.getElementById('sidebar').classList.remove('open');});});
 
-function doLogin(){var u=document.getElementById('adminUser').value,p=document.getElementById('adminPass').value;if(!u||!p)return showT('请输入账号密码','error');api('POST','/api/auth/login',{username:u,password:p},function(err,d){if(err){showT(err,'error');return;}if(!['admin','super_admin'].includes(d.user.role)){showT('没有管理权限','error');return;}if(d.user.role==='super_admin'){showT('超管请前往超管后台','error');return;}TOKEN=***adminUser=d.user;localStorage.setItem('admin_token',TOKEN);showApp();});}
+function doLogin(){var u=document.getElementById('adminUser').value,p=document.getElementById('adminPass').value;if(!u||!p)return showT('请输入账号密码','error');api('POST','/api/auth/login',{username:u,password:p},function(err,d){if(err){showT(err,'error');return;}if(!['admin','super_admin'].includes(d.user.role)){showT('没有管理权限','error');return;}if(d.user.role==='super_admin'){showT('超管请前往超管后台','error');return;}TOKEN=d.token;adminUser=d.user;localStorage.setItem('admin_token',TOKEN);showApp();});}
 function showApp(){
   document.getElementById('loginPage').style.display='none';
   document.getElementById('adminApp').style.display='block';
@@ -157,7 +157,7 @@ function showApp(){
   
   loadPage('dashboard');
 }
-function logout(){TOKEN=***adminUser=null;localStorage.removeItem('admin_token');location.reload();}
+function logout(){TOKEN=null;adminUser=null;localStorage.removeItem('admin_token');location.reload();}
 function loadPage(p){var fn={dashboard:loadDashboard,posts:loadPosts,comments:loadComments,reports:loadReports,chats:loadChats};if(fn[p])fn[p]();}
 
 function loadDashboard(){api('GET','/api/admin/stats',null,function(err,d){if(err)return;var s=d.stats;document.getElementById('statsGrid').innerHTML='<div class="stat-card"><div class="stat-icon" style="background:#fce4ec;color:#ec4899"><i class="fa-solid fa-heart"></i></div><div class="stat-value">'+s.totalPosts+'</div><div class="stat-label">帖子</div></div><div class="stat-card"><div class="stat-icon" style="background:#e8fde8;color:#34c759"><i class="fa-solid fa-comments"></i></div><div class="stat-value">'+s.totalComments+'</div><div class="stat-label">评论</div></div><div class="stat-card"><div class="stat-icon" style="background:#fff3e0;color:#ff9500"><i class="fa-solid fa-clock"></i></div><div class="stat-value">'+s.todayPosts+'</div><div class="stat-label">今日</div></div><div class="stat-card"><div class="stat-icon" style="background:#fce4ec;color:#ff3b5c"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="stat-value">'+s.pendingReview+'</div><div class="stat-label">待审</div></div>';
@@ -182,5 +182,5 @@ function api(m,u,d,cb){var h={'Content-Type':'application/json'};if(TOKEN)h['Aut
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
 function fmtDate(s){if(!s)return '-';return new Date(s+(s.indexOf('Z')>=0?'':'Z')).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});}
 function showT(m,t){var c=document.getElementById('toastArea'),d=document.createElement('div');d.style.cssText='background:#fff;padding:10px 18px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s';d.innerHTML='<i class="fa-solid fa-circle-'+(t==='success'?'check':'exclamation')+'" style="color:'+(t==='success'?'#34c759':'#ff3b5c')+';margin-right:6px"></i>'+m;c.appendChild(d);setTimeout(function(){d.style.opacity='0';setTimeout(function(){d.remove();},300);},3000);}
-if(TOKEN)api('GET','/api/auth/me',null,function(err,d){if(err||!d.user||!['admin','super_admin'].includes(d.user.role)){localStorage.removeItem('admin_token');TOKEN=***else{adminUser=d.user;showApp();}});
+if(TOKEN)api('GET','/api/auth/me',null,function(err,d){if(err||!d.user||!['admin','super_admin'].includes(d.user.role)){localStorage.removeItem('admin_token');TOKEN=null;}else{adminUser=d.user;showApp();}});
 </script></body></html>

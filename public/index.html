@@ -549,7 +549,7 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 </div>
 
 <script>
-var TOKEN = localS…tem('token') || null;
+var TOKEN = localStorage.getItem('token') || null;
 var USER = null, PAGE = 1, SORT = 'latest', SEARCH = '', FORUM = '', HASMORE = true, LOADING = false;
 
 function $(id){return document.getElementById(id)}
