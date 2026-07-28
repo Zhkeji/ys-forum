@@ -36,13 +36,56 @@ textarea.form-input{min-height:80px;resize:vertical;font-family:inherit}
 .toast-item{background:#fff;padding:10px 18px;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,0.08);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s}
 @media(max-width:768px){.sidebar{transform:translateX(-100%);transition:transform 0.3s}.sidebar.open{transform:translateX(0)}.main{margin-left:0}.content{padding:16px}.menu-btn{display:block!important}}</style>
 </head><body>
-<div id="loginPage" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);padding:20px">
-  <div style="background:#fff;border-radius:24px;padding:40px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);text-align:center">
-    <div style="font-size:48px;margin-bottom:12px">👑</div><h1 style="font-size:24px;margin-bottom:8px">超级管理员</h1><p style="color:#8e8e93;margin-bottom:28px">YS工作室论坛</p>
-    <input id="adminUser" style="width:100%;padding:12px 16px;border:1px solid #e5e5ea;border-radius:12px;font-size:14px;outline:none;margin-bottom:12px" placeholder="账号">
-    <input id="adminPass" type="password" style="width:100%;padding:12px 16px;border:1px solid #e5e5ea;border-radius:12px;font-size:14px;outline:none;margin-bottom:16px" placeholder="密码">
-    <button onclick="doLogin()" style="width:100%;padding:14px;background:linear-gradient(135deg,#6366f1,#ec4899);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer">登录</button>
-    <p style="margin-top:16px;font-size:13px;color:#8e8e93">普通管理员请前往 <a href="/admin/admin/" style="color:#6366f1">管理员后台</a></p>
+<div id="loginPage" style="min-height:100vh;display:flex;overflow:hidden;background:#0a0a1a;position:relative">
+  <!-- 动态背景 -->
+  <div style="position:absolute;inset:0;overflow:hidden">
+    <div style="position:absolute;width:400px;height:400px;background:#667eea;border-radius:50%;filter:blur(80px);opacity:0.6;top:-10%;left:-5%;animation:orbFloat 8s ease-in-out infinite"></div>
+    <div style="position:absolute;width:350px;height:350px;background:#764ba2;border-radius:50%;filter:blur(80px);opacity:0.6;bottom:-10%;right:-5%;animation:orbFloat 8s ease-in-out infinite 2s"></div>
+    <div style="position:absolute;width:300px;height:300px;background:#f093fb;border-radius:50%;filter:blur(80px);opacity:0.6;top:50%;left:50%;transform:translate(-50%,-50%);animation:orbFloat 8s ease-in-out infinite 4s"></div>
+  </div>
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px"></div>
+  <style>@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-30px) scale(1.1)}50%{transform:translate(-20px,20px) scale(0.9)}75%{transform:translate(20px,10px) scale(1.05)}}@keyframes authSlideIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes formFade{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}</style>
+
+  <!-- 主卡片 -->
+  <div style="position:relative;z-index:2;display:flex;width:900px;max-width:95vw;min-height:520px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.5);margin:auto;animation:authSlideIn 0.6s ease">
+    <!-- 左侧品牌 -->
+    <div style="flex:1;background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background:url(&quot;data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E&quot;)"></div>
+      <div style="font-size:48px;margin-bottom:16px;position:relative">👑</div>
+      <h1 style="font-size:32px;font-weight:800;color:#fff;margin-bottom:8px;position:relative">超级管理员</h1>
+      <p style="font-size:15px;color:rgba(255,255,255,0.85);line-height:1.6;position:relative">YS工作室论坛后台管理系统，拥有最高权限。</p>
+      <div style="margin-top:24px;position:relative">
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px"><i class="fa-solid fa-check-circle" style="color:#ffd700"></i> 用户与权限管理</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px"><i class="fa-solid fa-check-circle" style="color:#ffd700"></i> 内容审核与管理</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px"><i class="fa-solid fa-check-circle" style="color:#ffd700"></i> 系统设置与维护</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px"><i class="fa-solid fa-check-circle" style="color:#ffd700"></i> 数据统计与分析</div>
+      </div>
+    </div>
+
+    <!-- 右侧表单 -->
+    <div style="flex:1;background:rgba(15,15,35,0.95);backdrop-filter:blur(20px);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(102,126,234,0.1) 0%,transparent 50%)"></div>
+      <div style="position:relative">
+        <h2 style="font-size:22px;font-weight:700;color:#fff;margin-bottom:4px">欢迎回来 👋</h2>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:28px">登录超管后台</p>
+        <div style="margin-bottom:16px">
+          <label style="display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">账号</label>
+          <div style="position:relative">
+            <input id="adminUser" style="width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;outline:none;transition:0.3s" placeholder="请输入账号" onfocus="this.style.borderColor='#667eea';this.style.boxShadow='0 0 0 4px rgba(102,126,234,0.15)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow='none'">
+            <i class="fa-solid fa-user" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:15px"></i>
+          </div>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">密码</label>
+          <div style="position:relative">
+            <input id="adminPass" type="password" style="width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;outline:none;transition:0.3s" placeholder="请输入密码" onfocus="this.style.borderColor='#667eea';this.style.boxShadow='0 0 0 4px rgba(102,126,234,0.15)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)';this.style.boxShadow='none'">
+            <i class="fa-solid fa-lock" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:15px"></i>
+          </div>
+        </div>
+        <button onclick="doLogin()" style="width:100%;padding:13px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(102,126,234,0.4);transition:0.3s;position:relative;overflow:hidden" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(102,126,234,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 20px rgba(102,126,234,0.4)'">登 录</button>
+        <p style="margin-top:20px;font-size:13px;color:rgba(255,255,255,0.5);text-align:center">普通管理员请前往 <a href="/admin/admin/" style="color:#667eea;text-decoration:none" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">管理员后台</a></p>
+      </div>
+    </div>
   </div>
 </div>
 <div id="adminApp" style="display:none">
