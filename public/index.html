@@ -150,23 +150,79 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 .cmt-floor{color:var(--text-light);font-size:11px}
 
 /* 登录注册 */
-.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);z-index:1000;display:flex;align-items:center;justify-content:center}
+.auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;overflow:hidden;background:#0a0a1a}
 .auth-overlay.hidden{display:none}
-.auth-box{width:380px;max-width:92vw;background:rgba(255,255,255,0.15);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:36px 30px;animation:fadeUp 0.3s}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.auth-box h2{text-align:center;font-size:24px;font-weight:700;color:#fff;margin-bottom:4px}
-.auth-box .sub{text-align:center;font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:24px}
-.auth-field{margin-bottom:14px;position:relative}
-.auth-field input{width:100%;padding:11px 14px 11px 38px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:14px;outline:none;transition:0.2s}
-.auth-field input::placeholder{color:rgba(255,255,255,0.4)}
-.auth-field input:focus{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.2)}
-.auth-field i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.5);font-size:14px}
-.auth-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),#764ba2);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(74,144,217,0.4);transition:0.2s}
-.auth-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,144,217,0.5)}
-.auth-links{display:flex;justify-content:space-between;margin-top:14px}
-.auth-links a{color:rgba(255,255,255,0.7);font-size:12px;padding:4px 8px;border-radius:6px}
-.auth-links a:hover{background:rgba(255,255,255,0.1);color:#fff;text-decoration:none}
-#loginBox,#registerBox,#forgotBox{position:absolute;width:calc(100% - 60px)}
+/* 动态背景 */
+.auth-bg{position:absolute;inset:0;overflow:hidden}
+.auth-bg .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.6;animation:orbFloat 8s ease-in-out infinite}
+.auth-bg .orb:nth-child(1){width:400px;height:400px;background:#667eea;top:-10%;left:-5%;animation-delay:0s}
+.auth-bg .orb:nth-child(2){width:350px;height:350px;background:#764ba2;bottom:-10%;right:-5%;animation-delay:2s}
+.auth-bg .orb:nth-child(3){width:300px;height:300px;background:#f093fb;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:4s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-30px) scale(1.1)}50%{transform:translate(-20px,20px) scale(0.9)}75%{transform:translate(20px,10px) scale(1.05)}}
+/* 网格线 */
+.auth-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px}
+/* 粒子 */
+.auth-particles{position:absolute;inset:0;pointer-events:none}
+.auth-particles span{position:absolute;width:3px;height:3px;background:rgba(255,255,255,0.4);border-radius:50%;animation:particleUp linear infinite}
+@keyframes particleUp{0%{transform:translateY(0) scale(0);opacity:0}50%{opacity:1}100%{transform:translateY(-100vh) scale(1);opacity:0}}
+/* 卡片容器 */
+.auth-container{position:relative;z-index:2;display:flex;width:900px;max-width:95vw;min-height:520px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.5);animation:authSlideIn 0.6s ease}
+@keyframes authSlideIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* 左侧品牌区 */
+.auth-brand{flex:1;background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.auth-brand::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.auth-brand h1{font-size:32px;font-weight:800;color:#fff;margin-bottom:8px;position:relative}
+.auth-brand p{font-size:15px;color:rgba(255,255,255,0.85);line-height:1.6;position:relative}
+.auth-brand .brand-icon{font-size:48px;margin-bottom:16px;position:relative}
+.auth-brand .features{margin-top:24px;position:relative}
+.auth-brand .features div{display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px}
+.auth-brand .features i{color:#ffd700}
+/* 右侧表单区 */
+.auth-forms{flex:1;background:rgba(15,15,35,0.95);backdrop-filter:blur(20px);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.auth-forms::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(102,126,234,0.1) 0%,transparent 50%)}
+/* 标签切换 */
+.auth-tabs{display:flex;gap:0;margin-bottom:28px;position:relative;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px}
+.auth-tab{flex:1;padding:10px;text-align:center;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.5);transition:0.3s;border:none;background:none}
+.auth-tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,0.4)}
+/* 表单 */
+.auth-form{display:none;position:relative}
+.auth-form.active{display:block;animation:formFade 0.3s ease}
+@keyframes formFade{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.auth-form h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.auth-form .sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:24px}
+.auth-field{margin-bottom:16px;position:relative}
+.auth-field label{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.auth-field input{width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;outline:none;transition:0.3s}
+.auth-field input::placeholder{color:rgba(255,255,255,0.25)}
+.auth-field input:focus{border-color:#667eea;background:rgba(255,255,255,0.1);box-shadow:0 0 0 4px rgba(102,126,234,0.15)}
+.auth-field .field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:15px;transition:0.3s}
+.auth-field input:focus~.field-icon,.auth-field input:focus+.field-icon{color:#667eea}
+.auth-field .field-icon{top:calc(50% + 10px)}
+.auth-btn{width:100%;padding:13px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(102,126,234,0.4);transition:0.3s;position:relative;overflow:hidden;margin-top:4px}
+.auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(102,126,234,0.5)}
+.auth-btn:active{transform:translateY(0)}
+.auth-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:0.5s}
+.auth-btn:hover::before{left:100%}
+.auth-links{display:flex;justify-content:space-between;margin-top:16px;position:relative}
+.auth-links a{color:rgba(255,255,255,0.5);font-size:12px;padding:6px 10px;border-radius:8px;transition:0.2s}
+.auth-links a:hover{color:#fff;background:rgba(255,255,255,0.05);text-decoration:none}
+/* 分隔线 */
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;position:relative}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1)}
+.auth-divider span{font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px}
+/* 社交登录 */
+.social-btns{display:flex;gap:10px;position:relative}
+.social-btn{flex:1;padding:10px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:rgba(255,255,255,0.03);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;transition:0.2s}
+.social-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2)}
+/* 移动端 */
+@media(max-width:768px){
+  .auth-container{flex-direction:column;min-height:auto}
+  .auth-brand{padding:32px 24px;min-height:160px}
+  .auth-brand h1{font-size:24px}
+  .auth-brand .features{display:none}
+  .auth-forms{padding:32px 24px}
+}
+#loginBox,#registerBox,#forgotBox{position:relative;width:100%}
 #registerBox,#forgotBox{display:none}
 
 /* Toast */
@@ -197,32 +253,114 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 
 <!-- 登录注册 -->
 <div class="auth-overlay" id="authPage">
-  <div class="auth-box" style="position:relative;overflow:hidden">
-    <div id="loginBox">
-      <h2>🌸 欢迎回来</h2>
-      <p class="sub">登录你的论坛账号</p>
-      <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="loginUser" placeholder="用户名"></div>
-      <div class="auth-field"><i class="fa-solid fa-lock"></i><input type="password" id="loginPass" placeholder="密码"></div>
-      <button class="auth-btn" onclick="doLogin()">登 录</button>
-      <div class="auth-links"><a href="#" onclick="showReg();return false">注册账号</a><a href="#" onclick="showForgot();return false">忘记密码</a></div>
+  <!-- 动态背景 -->
+  <div class="auth-bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+  <div class="auth-grid"></div>
+  <div class="auth-particles" id="authParticles"></div>
+
+  <!-- 主卡片 -->
+  <div class="auth-container">
+    <!-- 左侧品牌 -->
+    <div class="auth-brand">
+      <div class="brand-icon">🌸</div>
+      <h1>YS工作室论坛</h1>
+      <p>一个温暖的信息交流社区，分享知识、交流想法、结识朋友。</p>
+      <div class="features">
+        <div><i class="fa-solid fa-check-circle"></i> 多板块自由讨论</div>
+        <div><i class="fa-solid fa-check-circle"></i> 即时私信聊天</div>
+        <div><i class="fa-solid fa-check-circle"></i> 积分等级系统</div>
+        <div><i class="fa-solid fa-check-circle"></i> 每日签到奖励</div>
+      </div>
     </div>
-    <div id="registerBox">
-      <h2>✨ 加入我们</h2>
-      <p class="sub">创建你的论坛账号</p>
-      <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="regUser" placeholder="用户名 (3-20字符)"></div>
-      <div class="auth-field"><i class="fa-solid fa-id-card"></i><input type="text" id="regNick" placeholder="昵称"></div>
-      <div class="auth-field"><i class="fa-solid fa-lock"></i><input type="password" id="regPass" placeholder="密码 (至少6位)"></div>
-      <div class="auth-field"><i class="fa-solid fa-shield-halved"></i><input type="password" id="regConfirm" placeholder="确认密码"></div>
-      <button class="auth-btn" onclick="doRegister()">注 册</button>
-      <div class="auth-links"><a href="#" onclick="showLogin();return false">已有账号？去登录</a></div>
-    </div>
-    <div id="forgotBox">
-      <h2>🔑 重置密码</h2>
-      <p class="sub">输入用户名和新密码</p>
-      <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="forgotUser" placeholder="用户名"></div>
-      <div class="auth-field"><i class="fa-solid fa-lock"></i><input type="password" id="forgotPass" placeholder="新密码 (至少6位)"></div>
-      <button class="auth-btn" onclick="doForgotPassword()">重置密码</button>
-      <div class="auth-links"><a href="#" onclick="showLogin();return false">返回登录</a></div>
+
+    <!-- 右侧表单 -->
+    <div class="auth-forms">
+      <!-- 标签切换 -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login',this)">登录</button>
+        <button class="auth-tab" onclick="switchAuthTab('register',this)">注册</button>
+      </div>
+
+      <!-- 登录表单 -->
+      <div class="auth-form active" id="loginBox">
+        <h2>欢迎回来 👋</h2>
+        <p class="sub">登录你的账号继续</p>
+        <div class="auth-field">
+          <label>用户名</label>
+          <input type="text" id="loginUser" placeholder="请输入用户名">
+          <i class="fa-solid fa-user field-icon"></i>
+        </div>
+        <div class="auth-field">
+          <label>密码</label>
+          <input type="password" id="loginPass" placeholder="请输入密码">
+          <i class="fa-solid fa-lock field-icon"></i>
+        </div>
+        <button class="auth-btn" onclick="doLogin()">登 录</button>
+        <div class="auth-links">
+          <a href="#" onclick="switchAuthTab('register');return false">注册账号</a>
+          <a href="#" onclick="showForgot();return false">忘记密码？</a>
+        </div>
+        <div class="auth-divider"><span>其他方式</span></div>
+        <div class="social-btns">
+          <button class="social-btn"><i class="fab fa-qq"></i> QQ</button>
+          <button class="social-btn"><i class="fab fa-weixin"></i> 微信</button>
+          <button class="social-btn"><i class="fab fa-github"></i> GitHub</button>
+        </div>
+      </div>
+
+      <!-- 注册表单 -->
+      <div class="auth-form" id="registerBox">
+        <h2>创建账号 ✨</h2>
+        <p class="sub">加入我们的社区</p>
+        <div class="auth-field">
+          <label>用户名</label>
+          <input type="text" id="regUser" placeholder="3-20个字符">
+          <i class="fa-solid fa-user field-icon"></i>
+        </div>
+        <div class="auth-field">
+          <label>昵称</label>
+          <input type="text" id="regNick" placeholder="你的显示名称">
+          <i class="fa-solid fa-id-card field-icon"></i>
+        </div>
+        <div class="auth-field">
+          <label>密码</label>
+          <input type="password" id="regPass" placeholder="至少6位">
+          <i class="fa-solid fa-lock field-icon"></i>
+        </div>
+        <div class="auth-field">
+          <label>确认密码</label>
+          <input type="password" id="regConfirm" placeholder="再次输入密码">
+          <i class="fa-solid fa-shield-halved field-icon"></i>
+        </div>
+        <button class="auth-btn" onclick="doRegister()">注 册</button>
+        <div class="auth-links">
+          <a href="#" onclick="switchAuthTab('login');return false">已有账号？去登录</a>
+        </div>
+      </div>
+
+      <!-- 忘记密码 -->
+      <div class="auth-form" id="forgotBox">
+        <h2>重置密码 🔑</h2>
+        <p class="sub">输入用户名和新密码</p>
+        <div class="auth-field">
+          <label>用户名</label>
+          <input type="text" id="forgotUser" placeholder="请输入用户名">
+          <i class="fa-solid fa-user field-icon"></i>
+        </div>
+        <div class="auth-field">
+          <label>新密码</label>
+          <input type="password" id="forgotPass" placeholder="至少6位">
+          <i class="fa-solid fa-lock field-icon"></i>
+        </div>
+        <button class="auth-btn" onclick="doForgotPassword()">重置密码</button>
+        <div class="auth-links">
+          <a href="#" onclick="switchAuthTab('login');return false">返回登录</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -428,10 +566,23 @@ function api(method,path,data,cb){
   r.onerror=function(){cb('网络错误');};r.send(data?JSON.stringify(data):null);
 }
 
-// 登录注册
-function showReg(){$('loginBox').style.display='none';$('registerBox').style.display='block';$('forgotBox').style.display='none';}
-function showForgot(){$('loginBox').style.display='none';$('registerBox').style.display='none';$('forgotBox').style.display='block';}
-function showLogin(){$('registerBox').style.display='none';$('forgotBox').style.display='none';$('loginBox').style.display='block';}
+// 登录注册标签切换
+function switchAuthTab(tab,btn){
+  document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
+  if(tab==='login'){$('loginBox').classList.add('active');document.querySelectorAll('.auth-tab')[0].classList.add('active');}
+  else if(tab==='register'){$('registerBox').classList.add('active');document.querySelectorAll('.auth-tab')[1].classList.add('active');}
+  else if(tab==='forgot'){$('forgotBox').classList.add('active');}
+}
+function showForgot(){
+  document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
+  $('forgotBox').classList.add('active');
+}
+function showLogin(){switchAuthTab('login');}
+function showReg(){switchAuthTab('register');}
+// 生成粒子
+(function(){var c=document.getElementById('authParticles');if(!c)return;for(var i=0;i<20;i++){var s=document.createElement('span');s.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation-duration:'+(4+Math.random()*6)+'s;animation-delay:'+Math.random()*5+'s;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px';c.appendChild(s);}})();
 
 function doLogin(){
   var u=$('loginUser').value.trim(),p=$('loginPass').value;
