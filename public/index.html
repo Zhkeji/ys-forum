@@ -171,7 +171,7 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 .cmt-reply{color:var(--primary);cursor:pointer;margin-left:8px}
 .cmt-reply:hover{text-decoration:underline}
 .cmt-floor{color:var(--text-light);font-size:11px}
-#toastArea{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none}
+#toastArea{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
 .toast{background:#fff;padding:10px 18px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.12);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s;border-left:3px solid var(--primary)}
 .toast.err{border-left-color:var(--accent)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -528,10 +528,13 @@ function switchTab(tab){
 
 function doLogin(){
   var u=$('loginUser').value.trim(),p=$('loginPass').value;
-  if(!u||!p){toast('请输入账号密码');return;}
+  if(!u||!p){toast('请输入账号密码',false);return;}
+  if(!u){toast('请输入用户名',false);return;}
+  if(!p){toast('请输入密码',false);return;}
+  toast('登录中...',true);
   api('POST','/api/auth/login',{username:u,password:p},function(err,d){
-    if(err){toast(err);return;}
-    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);enterSite();
+    if(err){toast('登录失败: '+(err||'未知错误'),false);return;}
+    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);toast('登录成功!',true);enterSite();
   });
 }
 
