@@ -179,13 +179,13 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 .auth-brand .features i{color:#ffd700}
 /* 右侧表单区 */
 .auth-forms{flex:1;background:rgba(15,15,35,0.95);backdrop-filter:blur(20px);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative}
-.auth-forms::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(102,126,234,0.1) 0%,transparent 50%)}
+.auth-forms::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(102,126,234,0.1) 0%,transparent 50%);pointer-events:none;z-index:0}
 /* 标签切换 */
 .auth-tabs{display:flex;gap:0;margin-bottom:28px;position:relative;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px}
 .auth-tab{flex:1;padding:10px;text-align:center;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.5);transition:0.3s;border:none;background:none}
 .auth-tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,0.4)}
 /* 表单 */
-.auth-form{display:none;position:relative}
+.auth-form{display:none;position:relative;z-index:1}
 .auth-form.active{display:block;animation:formFade 0.3s ease}
 @keyframes formFade{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
 .auth-form h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
