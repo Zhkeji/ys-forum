@@ -464,7 +464,11 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
     <div class="modal-header"><h3>个人资料</h3><button class="modal-close" onclick="closeModal('profileModal')">&times;</button></div>
     <div class="modal-body">
       <div style="text-align:center;margin-bottom:16px">
-        <img id="pAvatar" src="/img/default-avatar.png" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border)">
+        <div style="position:relative;display:inline-block">
+          <img id="pAvatar" src="/img/default-avatar.png" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border)">
+          <label for="avatarInput" style="position:absolute;bottom:0;right:0;width:24px;height:24px;background:var(--primary);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;border:2px solid #fff">📷</label>
+          <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)">
+        </div>
         <h3 id="pName" style="font-size:16px;margin-top:8px">-</h3>
         <p id="pBio" style="font-size:12px;color:var(--text-light)"></p>
         <div id="pRole" style="margin-top:8px"></div>
@@ -753,6 +757,16 @@ function openProfile(){
   if(USER.verified_identity)roleHtml+='<span style="display:inline-block;padding:3px 10px;background:#f0e8ff;color:#7c3aed;border-radius:6px;font-size:12px;margin-left:4px">✓ '+esc(USER.verified_identity)+'</span>';
   $('pRole').innerHTML=roleHtml;
   openModal('profileModal');loadIdentityStatus();
+}
+function uploadAvatar(input){
+  if(!input.files||!input.files[0])return;
+  var file=input.files[0];
+  if(file.size>5*1024*1024){toast('图片不能超过5MB');return;}
+  var fd=new FormData();fd.append('image',file);
+  var r=new XMLHttpRequest();r.open('POST','/api/upload/image',true);
+  if(TOKEN)r.setRequestHeader('Authorization','Bearer '+TOKEN);
+  r.onreadystatechange=function(){if(r.readyState===4){try{var d=JSON.parse(r.responseText);if(r.status>=200&&r.status<300){$('pAvatar').src=d.url;api('PUT','/api/auth/profile',{avatar:d.url},function(err,d2){if(err){toast(err);return;}USER=d2.user;$('topAvatar').src=USER.avatar;$('sbAvatar').src=USER.avatar;toast('头像已更新',true);});}else{toast(d.error||'上传失败');}}catch(e){toast('上传失败');}}};
+  r.onerror=function(){toast('网络错误');};r.send(fd);
 }
 function doSaveProfile(){var n=$('eNick').value.trim(),b=$('eBio').value.trim();if(!n){toast('昵称不能为空');return;}api('PUT','/api/auth/profile',{nickname:n,bio:b},function(err,d){if(err){toast(err);return;}USER=d.user;toast('已保存',true);$('topAvatar').src=USER.avatar||'/img/default-avatar.png';$('sbName').textContent=USER.nickname;});}
 function loadIdentityStatus(){api('GET','/api/auth/my-identity',null,function(err,d){if(err)return;var s=$('identityStatus');var f=$('identityForm');if(d.verifications.length){var v=d.verifications[0];if(v.status==='pending'){s.innerHTML='<div style="padding:8px;background:#fff3e0;border-radius:6px;font-size:12px;color:#ff9500;margin-bottom:8px">⏳ 认证审核中: '+esc(v.identity_name)+'</div>';f.style.display='none';}else if(v.status==='approved'){s.innerHTML='<div style="padding:8px;background:#e8fde8;border-radius:6px;font-size:12px;color:#52c41a;margin-bottom:8px">✅ 已认证: '+esc(v.identity_name)+'</div>';f.style.display='none';}else{s.innerHTML='<div style="padding:8px;background:#fce4ec;border-radius:6px;font-size:12px;color:#ff3b5c;margin-bottom:8px">❌ 已驳回: '+esc(v.admin_note||'未通过')+'</div>';f.style.display='block';}}else{f.style.display='block';}});}
