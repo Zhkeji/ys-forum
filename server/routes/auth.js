@@ -94,4 +94,18 @@ r.get('/user/:id', (req, res) => {
   } catch (e) { res.status(500).json({ error: '获取失败' }); }
 });
 
+// 忘记密码（简单重置）
+r.post('/forgot-password', (req, res) => {
+  try {
+    const { username, newPassword } = req.body;
+    if (!username || !newPassword) return res.status(400).json({ error: '请输入用户名和新密码' });
+    if (newPassword.length < 6) return res.status(400).json({ error: '密码至少6位' });
+    const db = getDb();
+    const u = db.prepare('SELECT id FROM users WHERE username=?').get(username);
+    if (!u) return res.status(404).json({ error: '用户不存在' });
+    db.prepare('UPDATE users SET password=? WHERE id=?').run(bcrypt.hashSync(newPassword, 10), u.id);
+    res.json({ message: '密码已重置，请使用新密码登录' });
+  } catch (e) { res.status(500).json({ error: '重置失败' }); }
+});
+
 module.exports = r;

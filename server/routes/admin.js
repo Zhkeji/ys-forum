@@ -342,8 +342,6 @@ r.post('/maintenance/toggle', requireSuperAdmin, (req, res) => {
   } catch (e) { res.status(500).json({ error: '失败' }); }
 });
 
-module.exports = r;
-
 // === 管理员权限管理 ===
 
 // 获取管理员权限
@@ -378,3 +376,5 @@ r.get('/admins/list', requireSuperAdmin, (req, res) => {
     res.json({ admins: admins.map(a => { let p = []; try { p = JSON.parse(a.admin_permissions || '[]'); } catch(e) {} return { ...a, permissions: p }; }) });
   } catch (e) { res.status(500).json({ error: '获取失败' }); }
 });
+
+module.exports = r;

@@ -3,7 +3,8 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const { initDatabase } = require('./database');
+const { v4: uuidv4 } = require('uuid');
+const { initDatabase, getDb } = require('./database');
 const { setupSocket } = require('./socket');
 const { loadSettings } = require('./settings');
 
@@ -93,8 +94,6 @@ app.get('/api/notifications/unread-count', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const { v4: uuidv4 } = require('uuid');
-const { getDb } = require('./database');
 
 initDatabase().then(() => {
   setupSocket(io);

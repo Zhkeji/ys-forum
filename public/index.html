@@ -171,7 +171,7 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
       <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="loginUser" placeholder="用户名"></div>
       <div class="auth-field"><i class="fa-solid fa-lock"></i><input type="password" id="loginPass" placeholder="密码"></div>
       <button class="auth-btn" onclick="doLogin()">登 录</button>
-      <div class="auth-links"><a href="#" onclick="showReg();return false">注册账号</a><a href="#" onclick="return false">忘记密码</a></div>
+      <div class="auth-links"><a href="#" onclick="showReg();return false">注册账号</a><a href="#" onclick="showForgot();return false">忘记密码</a></div>
     </div>
     <div class="auth-card" id="registerBox">
       <h2>✨ 加入我们</h2>
@@ -182,6 +182,14 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
       <div class="auth-field"><i class="fa-solid fa-shield-halved"></i><input type="password" id="regConfirm" placeholder="确认密码"></div>
       <button class="auth-btn" onclick="doRegister()">注 册</button>
       <div class="auth-links"><a href="#" onclick="showLogin();return false">已有账号？去登录</a></div>
+    </div>
+    <div class="auth-card" id="forgotBox">
+      <h2>🔑 重置密码</h2>
+      <p class="sub">输入用户名和新密码</p>
+      <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="forgotUser" placeholder="用户名"></div>
+      <div class="auth-field"><i class="fa-solid fa-lock"></i><input type="password" id="forgotPass" placeholder="新密码 (至少6位)"></div>
+      <button class="auth-btn" onclick="doForgotPassword()">重置密码</button>
+      <div class="auth-links"><a href="#" onclick="showLogin();return false">返回登录</a></div>
     </div>
   </div>
 </div>
@@ -335,7 +343,7 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
 </div>
 
 <script>
-var TOKEN = localS…tem('token') || null;
+var TOKEN = localStorage.getItem('token') || null;
 var USER = null, PAGE = 1, SORT = 'latest', SEARCH = '', FORUM = '', HASMORE = true, LOADING = false;
 
 // === 工具 ===
@@ -357,15 +365,16 @@ function api(method,path,data,cb){
 (function(){var c=$('particles');for(var i=0;i<15;i++){var s=document.createElement('span');var sz=6+Math.random()*18;s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*15)+'s;animation-delay:'+Math.random()*5+'s';c.appendChild(s);}})();
 
 // === 登录注册 ===
-function showReg(){$('loginBox').style.display='none';$('registerBox').style.display='block';}
-function showLogin(){$('registerBox').style.display='none';$('loginBox').style.display='block';}
+function showReg(){$('loginBox').style.display='none';$('registerBox').style.display='block';$('forgotBox').style.display='none';}
+function showForgot(){$('loginBox').style.display='none';$('registerBox').style.display='none';$('forgotBox').style.display='block';}
+function showLogin(){$('registerBox').style.display='none';$('forgotBox').style.display='none';$('loginBox').style.display='block';}
 
 function doLogin(){
   var u=$('loginUser').value.trim(),p=$('loginPass').value;
   if(!u||!p){toast('请输入账号密码');return;}
   api('POST','/api/auth/login',{username:u,password:p},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=***
+    TOKEN=d.token;
     USER=d.user;localStorage.setItem('token',TOKEN);enterSite();
   });
 }
@@ -377,12 +386,21 @@ function doRegister(){
   if(p!==c){toast('两次密码不一致');return;}
   api('POST','/api/auth/register',{username:u,password:p,nickname:n},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=***
+    TOKEN=d.token;
     USER=d.user;localStorage.setItem('token',TOKEN);toast('注册成功 🌸',true);enterSite();
   });
 }
 
-function doLogout(){TOKEN=***USER=null;localStorage.removeItem('token');location.reload();}
+function doForgotPassword(){
+  var u=$('forgotUser').value.trim(),p=$('forgotPass').value;
+  if(!u||!p){toast('请输入用户名和新密码');return;}
+  if(p.length<6){toast('密码至少6位');return;}
+  api('POST','/api/auth/forgot-password',{username:u,newPassword:p},function(err,d){
+    if(err){toast(err);return;}
+    toast('密码已重置，请登录',true);showLogin();
+  });
+}
+function doLogout(){TOKEN=null;USER=null;localStorage.removeItem('token');location.reload();}
 
 function enterSite(){
   $('authPage').classList.add('hidden');
@@ -592,7 +610,7 @@ function goPage(p){PAGE=p;loadPosts(true);window.scrollTo({top:0,behavior:'smoot
 // === 初始化 ===
 if(TOKEN){
   api('GET','/api/auth/me',null,function(err,d){
-    if(err||!d.user){localStorage.removeItem('token');TOKEN=***
+    if(err||!d.user){localStorage.removeItem('token');TOKEN=null;
     $('authPage').style.display='flex';return;}
     USER=d.user;enterSite();
   });
