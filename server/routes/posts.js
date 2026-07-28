@@ -43,7 +43,7 @@ r.get('/', optionalAuth, (req, res) => {
     if (sort === 'essence') { w += " AND p.is_essence=1"; o = 'ORDER BY p.created_at DESC'; }
 
     const total = db.prepare(`SELECT COUNT(*) as c FROM posts p ${w}`).get(...params).c;
-    const posts = db.prepare(`SELECT p.*,u.nickname as author_name,u.avatar as author_avatar,u.id as author_id,u.level as author_level,f.name as forum_name FROM posts p LEFT JOIN users u ON p.user_id=u.id LEFT JOIN forums f ON p.forum_id=f.id ${w} ${o} LIMIT ? OFFSET ?`).all(...params, limit, offset);
+    const posts = db.prepare(`SELECT p.*,u.nickname as author_name,u.avatar as author_avatar,u.id as author_id,u.level as author_level,u.role as author_role,u.verified_identity,u.identity_type,f.name as forum_name FROM posts p LEFT JOIN users u ON p.user_id=u.id LEFT JOIN forums f ON p.forum_id=f.id ${w} ${o} LIMIT ? OFFSET ?`).all(...params, limit, offset);
 
     res.json({
       posts: posts.map(x => {
@@ -64,7 +64,7 @@ r.get('/:id', optionalAuth, (req, res) => {
   try {
     const db = getDb();
     db.prepare('UPDATE posts SET views=views+1 WHERE id=?').run(req.params.id);
-    const p = db.prepare("SELECT p.*,u.nickname as author_name,u.avatar as author_avatar,u.id as author_id,u.level as author_level,f.name as forum_name FROM posts p LEFT JOIN users u ON p.user_id=u.id LEFT JOIN forums f ON p.forum_id=f.id WHERE p.id=? AND p.status!='deleted'").get(req.params.id);
+    const p = db.prepare("SELECT p.*,u.nickname as author_name,u.avatar as author_avatar,u.id as author_id,u.level as author_level,u.role as author_role,u.verified_identity,u.identity_type,f.name as forum_name FROM posts p LEFT JOIN users u ON p.user_id=u.id LEFT JOIN forums f ON p.forum_id=f.id WHERE p.id=? AND p.status!='deleted'").get(req.params.id);
     if (!p) return res.status(404).json({ error: '帖子不存在' });
     let img = [], tag = [];
     try { img = JSON.parse(p.images); } catch (e) {}

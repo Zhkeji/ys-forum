@@ -99,6 +99,13 @@ a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 .topic-meta{display:flex;gap:8px;font-size:11px;color:var(--text-light)}
 .topic-meta .tag{padding:1px 6px;background:#f0f0f0;border-radius:3px;color:var(--text-light);cursor:pointer}
 .topic-meta .tag:hover{background:var(--primary);color:#fff}
+.identity-badge{display:inline-flex;align-items:center;gap:3px;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:500;margin-left:4px}
+.identity-badge.super_admin{background:#ffe4e8;color:#e74c3c}
+.identity-badge.admin{background:#e8f4fd;color:#4a90d9}
+.identity-badge.moderator{background:#e8fde8;color:#52c41a}
+.identity-badge.streamer{background:#fff3e0;color:#ff9500}
+.identity-badge.verified{background:#f0e8ff;color:#7c3aed}
+.identity-badge.default{background:#f0f0f0;color:#999}
 .topic-author{width:100px;text-align:center;font-size:12px;color:var(--text-light);flex-shrink:0}
 .topic-author a{color:var(--text-link)}
 .topic-replies{width:70px;text-align:center;flex-shrink:0}
@@ -466,6 +473,16 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         <button onclick="doChangePwd()" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:13px">修改密码</button>
       </div>
       <button onclick="doLogout()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #fde8e8;background:#fff5f5;color:var(--accent);cursor:pointer;margin-top:10px;font-size:13px">退出登录</button>
+      <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:14px">
+        <p style="font-weight:600;font-size:14px;margin-bottom:8px">身份认证</p>
+        <div id="identityStatus"></div>
+        <div id="identityForm">
+          <div class="form-group"><label>认证类型</label><select id="identityType" class="form-input"><option value="streamer">🎮 主播</option><option value="moderator">🛡️ 版主</option><option value="verified">✅ 认证用户</option><option value="developer">💻 开发者</option><option value="designer">🎨 设计师</option><option value="other">📌 其他</option></select></div>
+          <div class="form-group"><label>认证名称</label><input class="form-input" id="identityName" placeholder="如：B站UP主、XX版主"></div>
+          <div class="form-group"><label>认证理由</label><textarea class="form-input" id="identityReason" rows="2" placeholder="说明为什么申请认证"></textarea></div>
+          <button onclick="submitIdentity()" class="form-btn" style="padding:8px;font-size:13px">提交认证申请</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -619,6 +636,14 @@ function makeTopic(p){
   div.className=cls;
   var author=p.is_anonymous?'匿名用户':(p.author_name||'用户');
   var avatar=p.is_anonymous?'/img/default-avatar.png':(p.author_avatar||'/img/default-avatar.png');
+  var identityHtml='';
+  if(!p.is_anonymous&&p.author_role){
+    if(p.author_role==='super_admin')identityHtml='<span class="identity-badge super_admin">👑 超管</span>';
+    else if(p.author_role==='admin')identityHtml='<span class="identity-badge admin">🔧 管理</span>';
+  }
+  if(!p.is_anonymous&&p.verified_identity){
+    identityHtml+='<span class="identity-badge '+(p.identity_type||'verified')+'">✓ '+esc(p.verified_identity)+'</span>';
+  }
   var tags=p.tags||[];
   var tagsHtml='';
   if(tags.length){tagsHtml='<div class="topic-tags">'+tags.map(function(t){return '<span class="tag" onclick="event.stopPropagation();searchTag(\''+esc(t)+'\')">'+esc(t)+'</span>';}).join('')+'</div>';}
@@ -630,7 +655,7 @@ function makeTopic(p){
 
   div.innerHTML='<img src="'+avatar+'" class="topic-avatar">'+
     '<div class="topic-info">'+
-      '<div class="topic-title">'+pinned+essence+esc(p.title)+'</div>'+
+      '<div class="topic-title">'+pinned+essence+esc(p.title)+identityHtml+'</div>'+
       '<div class="topic-meta">'+forumName+tagsHtml+'</div>'+
     '</div>'+
     '<div class="topic-author"><a href="#" onclick="event.stopPropagation()">'+esc(author)+'</a></div>'+
@@ -699,9 +724,11 @@ function startChat(userId){api('POST','/api/chat/conversations',{userId:userId},
 function openProfile(){
   if(!USER)return;
   $('pAvatar').src=USER.avatar||'/img/default-avatar.png';$('pName').textContent=USER.nickname;$('pBio').textContent=USER.bio||'';
-  $('eNick').value=USER.nickname||'';$('eBio').value=USER.bio||'';openModal('profileModal');
+  $('eNick').value=USER.nickname||'';$('eBio').value=USER.bio||'';openModal('profileModal');loadIdentityStatus();
 }
 function doSaveProfile(){var n=$('eNick').value.trim(),b=$('eBio').value.trim();if(!n){toast('昵称不能为空');return;}api('PUT','/api/auth/profile',{nickname:n,bio:b},function(err,d){if(err){toast(err);return;}USER=d.user;toast('已保存',true);$('topAvatar').src=USER.avatar||'/img/default-avatar.png';$('sbName').textContent=USER.nickname;});}
+function loadIdentityStatus(){api('GET','/api/auth/my-identity',null,function(err,d){if(err)return;var s=$('identityStatus');var f=$('identityForm');if(d.verifications.length){var v=d.verifications[0];if(v.status==='pending'){s.innerHTML='<div style="padding:8px;background:#fff3e0;border-radius:6px;font-size:12px;color:#ff9500;margin-bottom:8px">⏳ 认证审核中: '+esc(v.identity_name)+'</div>';f.style.display='none';}else if(v.status==='approved'){s.innerHTML='<div style="padding:8px;background:#e8fde8;border-radius:6px;font-size:12px;color:#52c41a;margin-bottom:8px">✅ 已认证: '+esc(v.identity_name)+'</div>';f.style.display='none';}else{s.innerHTML='<div style="padding:8px;background:#fce4ec;border-radius:6px;font-size:12px;color:#ff3b5c;margin-bottom:8px">❌ 已驳回: '+esc(v.admin_note||'未通过')+'</div>';f.style.display='block';}}else{f.style.display='block';}});}
+function submitIdentity(){var t=$('identityType').value,n=$('identityName').value.trim(),r=$('identityReason').value.trim();if(!n){toast('请填写认证名称');return;}api('POST','/api/auth/verify-identity',{identityType:t,identityName:n,reason:r},function(err){if(err){toast(err);return;}toast('申请已提交',true);loadIdentityStatus();});}
 function doChangePwd(){var o=$('eOldPwd').value,n=$('eNewPwd').value;if(!o||!n){toast('请输入密码');return;}if(n.length<6){toast('新密码至少6位');return;}api('PUT','/api/auth/password',{oldPassword:o,newPassword:n},function(err){if(err){toast(err);return;}toast('密码已修改',true);$('eOldPwd').value='';$('eNewPwd').value='';});}
 
 function loadSidebar(){

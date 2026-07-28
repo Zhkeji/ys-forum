@@ -377,4 +377,29 @@ r.get('/admins/list', requireSuperAdmin, (req, res) => {
   } catch (e) { res.status(500).json({ error: '获取失败' }); }
 });
 
+// 身份认证管理
+r.get('/verifications', requirePermission('users'), (req, res) => {
+  try {
+    const db = getDb();
+    const status = req.query.status || 'pending';
+    const verifications = db.prepare(`SELECT v.*,u.username,u.nickname FROM identity_verifications v LEFT JOIN users u ON v.user_id=u.id WHERE v.status=? ORDER BY v.created_at DESC`).all(status);
+    res.json({ verifications });
+  } catch (e) { res.status(500).json({ error: '获取失败' }); }
+});
+
+r.put('/verifications/:id', requirePermission('users'), (req, res) => {
+  try {
+    const { status, adminNote, identityType } = req.body;
+    if (!['approved', 'rejected'].includes(status)) return res.status(400).json({ error: '无效状态' });
+    const db = getDb();
+    const v = db.prepare('SELECT * FROM identity_verifications WHERE id=?').get(req.params.id);
+    if (!v) return res.status(404).json({ error: '申请不存在' });
+    db.prepare('UPDATE identity_verifications SET status=?,admin_note=?,reviewed_by=?,reviewed_at=datetime("now") WHERE id=?').run(status, adminNote || '', req.user.id, req.params.id);
+    if (status === 'approved') {
+      db.prepare('UPDATE users SET verified_identity=?,identity_type=? WHERE id=?').run(v.identity_name, v.identity_type, v.user_id);
+    }
+    res.json({ message: status === 'approved' ? '已通过' : '已驳回' });
+  } catch (e) { res.status(500).json({ error: '操作失败' }); }
+});
+
 module.exports = r;

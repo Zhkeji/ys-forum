@@ -58,6 +58,7 @@ async function initDatabase() {
       status TEXT DEFAULT 'active', points INTEGER DEFAULT 0, level INTEGER DEFAULT 1,
       exp INTEGER DEFAULT 0, checkin_streak INTEGER DEFAULT 0, last_checkin TEXT,
       admin_permissions TEXT DEFAULT '[]', ban_reason TEXT, ban_until TEXT,
+      verified_identity TEXT, identity_type TEXT,
       created_at TEXT DEFAULT (datetime('now')), last_login TEXT
     );
 
@@ -171,6 +172,16 @@ async function initDatabase() {
     CREATE TABLE IF NOT EXISTS notifications (
       id TEXT PRIMARY KEY, user_id TEXT NOT NULL, type TEXT NOT NULL,
       content TEXT, from_user_id TEXT, post_id TEXT, is_read INTEGER DEFAULT 0,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS identity_verifications (
+      id TEXT PRIMARY KEY, user_id TEXT NOT NULL,
+      identity_type TEXT NOT NULL, identity_name TEXT NOT NULL,
+      reason TEXT, proof_url TEXT,
+      status TEXT DEFAULT 'pending',
+      admin_note TEXT,
+      reviewed_by TEXT, reviewed_at TEXT,
       created_at TEXT DEFAULT (datetime('now'))
     );
   `);

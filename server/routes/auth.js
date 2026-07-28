@@ -108,4 +108,27 @@ r.post('/forgot-password', (req, res) => {
   } catch (e) { res.status(500).json({ error: '重置失败' }); }
 });
 
+// 提交身份认证申请
+r.post('/verify-identity', authenticate, (req, res) => {
+  try {
+    const { identityType, identityName, reason, proofUrl } = req.body;
+    if (!identityType || !identityName) return res.status(400).json({ error: '请填写认证类型和名称' });
+    const db = getDb();
+    const pending = db.prepare("SELECT id FROM identity_verifications WHERE user_id=? AND status='pending'").get(req.user.id);
+    if (pending) return res.status(400).json({ error: '你已有待审核的申请' });
+    const id = uuidv4();
+    db.prepare('INSERT INTO identity_verifications (id,user_id,identity_type,identity_name,reason,proof_url) VALUES (?,?,?,?,?,?)').run(id, req.user.id, identityType, identityName, reason || '', proofUrl || '');
+    res.json({ message: '申请已提交，等待审核' });
+  } catch (e) { res.status(500).json({ error: '提交失败' }); }
+});
+
+// 获取我的认证状态
+r.get('/my-identity', authenticate, (req, res) => {
+  try {
+    const db = getDb();
+    const verifications = db.prepare('SELECT * FROM identity_verifications WHERE user_id=? ORDER BY created_at DESC').all(req.user.id);
+    res.json({ verifications });
+  } catch (e) { res.status(500).json({ error: '获取失败' }); }
+});
+
 module.exports = r;
