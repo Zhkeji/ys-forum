@@ -740,7 +740,7 @@ function goPage(p){PAGE=p;loadPosts(true);window.scrollTo({top:0,behavior:'smoot
 
 if(TOKEN){
   api('GET','/api/auth/me',null,function(err,d){
-    if(err||!d.user){localStorage.removeItem('token');TOKEN=***
+    if(err||!d.user){localStorage.removeItem('token');TOKEN=null;return;}
     USER=d.user;enterSite();
   });
 }
