@@ -277,7 +277,7 @@ function savePermissions(){
   });
 }
 
-function showT(m,t),d=document.createElement('div');d.className='toast-item';d.innerHTML='<i class="fa-solid fa-circle-'+(t==='success'?'check':'exclamation')+'" style="color:'+(t==='success'?'#34c759':'#ff3b5c')+';margin-right:6px"></i>'+m;c.appendChild(d);setTimeout(function(){d.style.opacity='0';setTimeout(function(){d.remove();},300);},3000);}
+function showT(m,t){var c=document.getElementById('toastArea'),d=document.createElement('div');d.className='toast-item';d.innerHTML='<i class="fa-solid fa-circle-'+(t==='success'?'check':'exclamation')+'" style="color:'+(t==='success'?'#34c759':'#ff3b5c')+';margin-right:6px"></i>'+m;c.appendChild(d);setTimeout(function(){d.style.opacity='0';setTimeout(function(){d.remove();},300);},3000);}
 function debounce(fn,ms){var t;return function(){clearTimeout(t);t=setTimeout(fn,ms);};}
 if(TOKEN)api('GET','/api/auth/me',null,function(err,d){if(err||!d.user||d.user.role!=='super_admin'){localStorage.removeItem('admin_token');TOKEN=null;}else{adminUser=d.user;showApp();}});
 </script></body></html>

@@ -48,7 +48,7 @@
 </div>
 <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
 <script>
-var API='',TOKEN=localS…tem('token'),USER=null,socket=null,currentConv=null,conversations=[];
+var API='',TOKEN=localStorage.getItem('token'),USER=null,socket=null,currentConv=null,conversations=[];
 if(!TOKEN)location.href='/';
 fetchAPI('/api/auth/me').then(function(d){USER=d.user;initSocket();loadConvs();var p=new URLSearchParams(location.search);if(p.get('id'))setTimeout(function(){openConv(p.get('id'));},500);}).catch(function(){localStorage.removeItem('token');location.href='/';});
 
