@@ -6,153 +6,188 @@
 <title>YS工作室论坛</title>
 <link rel="icon" href="/img/logo.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--glass-bg:rgba(255,255,255,0.25);--glass-border:rgba(255,255,255,0.18);--glass-blur:blur(20px);--primary:#6366f1;--primary-light:#818cf8;--accent:#ec4899;--bg-gradient:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);--text:#1e293b;--text-light:#64748b;--card-radius:20px}
-body{font-family:'Inter','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg-gradient);background-attachment:fixed;color:var(--text);min-height:100vh;overflow-x:hidden}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.3);border-radius:3px}
-.glass{background:var(--glass-bg);backdrop-filter:var(--glass-blur);-webkit-backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);box-shadow:0 8px 32px rgba(0,0,0,0.1)}
+:root{--bg:#f5f5f5;--card:#fff;--primary:#4a90d9;--primary-dark:#357abd;--text:#333;--text-light:#999;--text-link:#4a90d9;--border:#e5e5e5;--hover:#f0f7ff;--accent:#ff6b6b;--success:#52c41a;--radius:8px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:14px}
+a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
+.container{max-width:1100px;margin:0 auto;padding:0 16px}
 
-/* === 登录注册页 === */
-#authPage{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg-gradient);background-size:300% 300%;animation:gm 10s ease infinite}
-@keyframes gm{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-#authPage.hidden{display:none}
-.auth-box{width:420px;max-width:92vw;position:relative;overflow:hidden}
-.auth-card{background:rgba(255,255,255,0.15);backdrop-filter:blur(30px);border:1px solid rgba(255,255,255,0.2);border-radius:28px;padding:44px 36px;position:relative;z-index:2}
-.auth-card::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);animation:shimmer 6s linear infinite}
-@keyframes shimmer{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.auth-card h2{text-align:center;font-size:28px;font-weight:700;color:#fff;margin-bottom:6px;position:relative}
-.auth-card .sub{text-align:center;font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:30px;position:relative}
-.auth-field{margin-bottom:18px;position:relative}
-.auth-field input{width:100%;padding:15px 18px 15px 46px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:14px;color:#fff;font-size:15px;outline:none;transition:0.3s}
-.auth-field input::placeholder{color:rgba(255,255,255,0.4)}
-.auth-field input:focus{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.2);box-shadow:0 0 0 3px rgba(255,255,255,0.1)}
-.auth-field i{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.5);font-size:16px}
-.auth-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:600;cursor:pointer;box-shadow:0 8px 25px rgba(99,102,241,0.4);transition:0.3s;position:relative;overflow:hidden}
-.auth-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(99,102,241,0.5)}
-.auth-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:0.5s}
-.auth-btn:hover::before{left:100%}
-.auth-links{display:flex;justify-content:space-between;margin-top:18px;position:relative}
-.auth-links a{color:rgba(255,255,255,0.7);font-size:13px;padding:6px 12px;border-radius:8px;text-decoration:none;transition:0.2s}
-.auth-links a:hover{background:rgba(255,255,255,0.15);color:#fff}
-#registerBox{display:none}
-#forgotBox{display:none}
-.auth-particles{position:fixed;inset:0;pointer-events:none;z-index:0}
-.auth-particles span{position:absolute;background:rgba(255,255,255,0.1);border-radius:50%;animation:floatUp linear infinite}
-@keyframes floatUp{0%{transform:translateY(0) rotate(0);opacity:0.6}100%{transform:translateY(-100vh) rotate(720deg);opacity:0}}
+/* 顶部导航 */
+.navbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.navbar-inner{display:flex;align-items:center;height:52px;gap:20px}
+.logo{font-size:20px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.logo span{font-size:24px}
+.nav-search{flex:1;max-width:400px;position:relative}
+.nav-search input{width:100%;padding:7px 12px 7px 32px;border:1px solid var(--border);border-radius:20px;font-size:13px;outline:none;background:#f8f8f8;transition:0.2s}
+.nav-search input:focus{border-color:var(--primary);background:#fff;box-shadow:0 0 0 3px rgba(74,144,217,0.1)}
+.nav-search i{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#bbb;font-size:13px}
+.nav-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-btn{padding:6px 14px;border:1px solid var(--border);border-radius:6px;font-size:13px;cursor:pointer;background:#fff;color:var(--text);transition:0.2s;display:flex;align-items:center;gap:4px}
+.nav-btn:hover{border-color:var(--primary);color:var(--primary)}
+.nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.nav-btn.primary:hover{background:var(--primary-dark)}
+.nav-avatar{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid var(--border);object-fit:cover}
+.nav-badge{background:var(--accent);color:#fff;font-size:10px;padding:1px 5px;border-radius:10px;margin-left:-4px;margin-top:-8px}
 
-/* === 主内容 === */
-#mainPage{display:none;min-height:100vh}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.15);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.15)}
-.topbar-inner{max-width:1200px;margin:0 auto;padding:0 20px;height:56px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:18px;font-weight:700;color:#fff;text-decoration:none;display:flex;align-items:center;gap:8px}
-.topbar-right{display:flex;align-items:center;gap:8px}
-.topbar-btn{padding:8px 14px;border:none;border-radius:10px;font-size:13px;cursor:pointer;background:rgba(255,255,255,0.15);color:#fff;transition:0.2s}
-.topbar-btn:hover{background:rgba(255,255,255,0.25)}
-.topbar-btn.primary{background:linear-gradient(135deg,var(--primary),var(--accent));box-shadow:0 4px 15px rgba(99,102,241,0.3)}
-.topbar-avatar{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid rgba(255,255,255,0.3)}
+/* 子导航 */
+.sub-nav{background:#fff;border-bottom:1px solid var(--border);padding:0}
+.sub-nav-inner{display:flex;gap:0;overflow-x:auto}
+.sub-nav a{padding:10px 16px;font-size:13px;color:var(--text-light);white-space:nowrap;border-bottom:2px solid transparent;transition:0.2s}
+.sub-nav a:hover{color:var(--primary);text-decoration:none;background:var(--hover)}
+.sub-nav a.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:500}
 
-/* 布局 */
-.wrap{max-width:1200px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1fr 300px;gap:20px}
-.feed{min-width:0}
-.sidebar{position:sticky;top:76px;align-self:start}
+/* 主布局 */
+.main{display:grid;grid-template-columns:1fr 280px;gap:16px;padding:16px 0}
 
-/* 公告栏 */
-.ann-bar{border-radius:16px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.9);overflow:hidden}
-.ann-bar i{animation:bounce 1s infinite}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+/* 帖子列表 */
+.topic-list{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.topic-header{display:flex;align-items:center;padding:10px 16px;background:#fafafa;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-light)}
+.topic-header span{flex:1}
+.topic-header .w-title{flex:3}
+.topic-header .w-author{width:100px;text-align:center}
+.topic-header .w-replies{width:70px;text-align:center}
+.topic-header .w-time{width:80px;text-align:right}
+.topic-item{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid #f0f0f0;transition:0.15s;cursor:pointer}
+.topic-item:hover{background:var(--hover)}
+.topic-item:last-child{border-bottom:none}
+.topic-item.pinned{background:#fffbe6;border-left:3px solid #faad14}
+.topic-item.essence{border-left:3px solid var(--accent)}
+.topic-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;margin-right:12px;flex-shrink:0;border:1px solid var(--border)}
+.topic-info{flex:3;min-width:0}
+.topic-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topic-title:hover{color:var(--primary)}
+.topic-meta{display:flex;gap:8px;font-size:11px;color:var(--text-light)}
+.topic-meta .tag{padding:1px 6px;background:#f0f0f0;border-radius:3px;color:var(--text-light)}
+.topic-meta .tag:hover{background:var(--primary);color:#fff}
+.topic-author{width:100px;text-align:center;font-size:12px;color:var(--text-light);flex-shrink:0}
+.topic-author a{color:var(--text-link)}
+.topic-replies{width:70px;text-align:center;flex-shrink:0}
+.topic-replies .count{display:inline-block;min-width:24px;padding:2px 8px;background:var(--primary);color:#fff;border-radius:12px;font-size:11px;font-weight:500}
+.topic-replies .count.zero{background:#e8e8e8;color:var(--text-light)}
+.topic-time{width:80px;text-align:right;font-size:11px;color:var(--text-light);flex-shrink:0}
+.topic-tags{display:flex;gap:4px;margin-top:4px}
 
-/* 搜索 */
-.search-box{border-radius:16px;padding:12px 16px;margin-bottom:14px;display:flex;gap:10px}
-.search-box input{flex:1;background:none;border:none;outline:none;font-size:14px;color:#fff}
-.search-box input::placeholder{color:rgba(255,255,255,0.5)}
-.search-box button{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 14px;border-radius:10px;cursor:pointer}
+/* 侧边栏 */
+.sidebar{display:flex;flex-direction:column;gap:12px}
+.sb-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
+.sb-card-header{padding:10px 14px;background:#fafafa;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px}
+.sb-card-body{padding:12px 14px}
 
-/* 板块标签 */
-.forum-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px}
-.forum-tab{padding:8px 16px;border-radius:12px;font-size:13px;cursor:pointer;border:none;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7);white-space:nowrap;transition:0.2s}
-.forum-tab.active{background:rgba(255,255,255,0.3);color:#fff;font-weight:600}
+/* 用户卡片 */
+.user-card{text-align:center;padding:16px}
+.user-card img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--border)}
+.user-card .name{font-size:15px;font-weight:600;margin-top:8px}
+.user-card .bio{font-size:12px;color:var(--text-light);margin-top:2px}
+.user-stats{display:flex;justify-content:space-around;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.user-stats div{text-align:center}
+.user-stats .num{font-size:18px;font-weight:700;color:var(--primary)}
+.user-stats .lbl{font-size:11px;color:var(--text-light)}
+.checkin-btn{margin-top:12px;width:100%;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;transition:0.2s}
+.checkin-btn:hover{background:var(--primary-dark)}
+.checkin-btn.done{background:#e8e8e8;color:var(--text-light);cursor:default}
 
-/* 排序 */
-.sort-tabs{display:flex;gap:4px;border-radius:14px;padding:4px;margin-bottom:14px}
-.sort-tab{flex:1;text-align:center;padding:10px 0;border-radius:10px;font-size:13px;cursor:pointer;border:none;background:none;color:rgba(255,255,255,0.6);transition:0.2s}
-.sort-tab.active{background:rgba(255,255,255,0.25);color:#fff;font-weight:600}
+/* 统计 */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-item{text-align:center;padding:8px;background:#f8f8f8;border-radius:6px}
+.stat-item .num{font-size:18px;font-weight:700;color:var(--primary)}
+.stat-item .lbl{font-size:11px;color:var(--text-light)}
 
-/* 帖子卡片 */
-.post-card{border-radius:var(--card-radius);padding:20px;margin-bottom:14px;cursor:pointer;transition:0.3s}
-.post-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.15)}
-.post-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.post-head img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.3)}
-.post-head .name{font-weight:600;font-size:14px;color:#fff}
-.post-head .time{font-size:12px;color:rgba(255,255,255,0.6)}
-.post-head .forum-tag{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.2);color:rgba(255,255,255,0.8);margin-left:auto}
-.post-head .pinned{font-size:11px;padding:3px 8px;border-radius:20px;background:rgba(255,215,0,0.3);color:#ffd700;margin-left:6px}
-.post-head .essence{font-size:11px;padding:3px 8px;border-radius:20px;background:rgba(255,107,107,0.3);color:#ff6b6b;margin-left:6px}
-.post-title{font-size:17px;font-weight:600;color:#fff;margin-bottom:8px;line-height:1.4}
-.post-text{font-size:14px;color:rgba(255,255,255,0.8);line-height:1.6;margin-bottom:10px}
-.post-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-.post-tags span{font-size:11px;padding:3px 10px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);border-radius:6px}
-.post-foot{display:flex;align-items:center;gap:16px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.1)}
-.post-act{display:flex;align-items:center;gap:4px;font-size:13px;color:rgba(255,255,255,0.6);cursor:pointer;padding:4px 8px;border-radius:8px;border:none;background:none;transition:0.15s}
-.post-act:hover{background:rgba(255,255,255,0.15);color:#fff}
-.post-act.liked{color:#ff6b6b}
-.expand-link{color:var(--primary-light);font-size:13px;cursor:pointer;font-weight:500}
+/* 公告 */
+.ann-item{padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
+.ann-item:last-child{border-bottom:none}
+.ann-item .title{color:var(--text);font-weight:500}
+.ann-item .title:hover{color:var(--primary)}
+.ann-item .time{font-size:11px;color:var(--text-light);margin-top:2px}
 
-/* 侧边栏卡片 */
-.sb-card{border-radius:var(--card-radius);padding:18px;margin-bottom:14px}
-.sb-card h3{font-size:14px;font-weight:600;color:rgba(255,255,255,0.9);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.sb-stats{display:flex;justify-content:space-around;text-align:center}
-.sb-stats .num{font-size:22px;font-weight:700;color:#fff}
-.sb-stats .lbl{font-size:11px;color:rgba(255,255,255,0.6)}
-.tag-cloud{display:flex;flex-wrap:wrap;gap:5px}
-.tag-cloud span{font-size:11px;padding:4px 10px;background:rgba(255,255,255,0.15);color:rgba(255,255,255,0.8);border-radius:8px;cursor:pointer;transition:0.2s}
-.tag-cloud span:hover{background:rgba(255,255,255,0.3);color:#fff}
-.sb-ann{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-size:13px;color:rgba(255,255,255,0.8)}
-.sb-ann:last-child{border-bottom:none}
-.sb-link{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;color:rgba(255,255,255,0.7);text-decoration:none}
-.sb-link:hover{color:#fff}
-.sb-footer{text-align:center;font-size:11px;color:rgba(255,255,255,0.4);padding:8px}
+/* 标签云 */
+.tag-list{display:flex;flex-wrap:wrap;gap:6px}
+.tag-item{padding:3px 10px;background:#f0f0f0;border-radius:4px;font-size:12px;color:var(--text-light);cursor:pointer;transition:0.2s}
+.tag-item:hover{background:var(--primary);color:#fff}
+
+/* 友链 */
+.link-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
+.link-item img{width:16px;height:16px;border-radius:3px}
+.link-item a{color:var(--text)}
 
 /* 弹窗 */
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);z-index:200;align-items:center;justify-content:center}
-.modal.show{display:flex}
-.modal-box{background:rgba(255,255,255,0.95);backdrop-filter:blur(20px);border-radius:20px;box-shadow:0 25px 60px rgba(0,0,0,0.2);width:90%;max-width:480px;max-height:85vh;overflow-y:auto;padding:28px;animation:fadeUp 0.3s}
-.modal-box.wide{max-width:640px}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.modal-close{position:absolute;top:14px;right:14px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:none;background:#f0f0f0;border-radius:50%;cursor:pointer;font-size:18px;color:#999}
-.fg{margin-bottom:14px}
-.fg label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:5px}
-.fi{width:100%;padding:11px 14px;border:1px solid #e0e0e0;border-radius:12px;font-size:14px;outline:none;background:#fafafa;transition:0.2s}
-.fi:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,0.1)}
-textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
-.btn-primary{width:100%;padding:14px;background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(99,102,241,0.3)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;justify-content:center;align-items:center}
+.modal-overlay.show{display:flex}
+.modal{background:#fff;border-radius:12px;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-header h3{font-size:16px;font-weight:600}
+.modal-close{width:28px;height:28px;border:none;background:#f0f0f0;border-radius:50%;cursor:pointer;font-size:16px;color:#999;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:#e0e0e0}
+.modal-body{padding:20px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:13px;font-weight:500;margin-bottom:4px;color:var(--text)}
+.form-input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:6px;font-size:14px;outline:none;transition:0.2s}
+.form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(74,144,217,0.1)}
+textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
+.form-btn{width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;transition:0.2s}
+.form-btn:hover{background:var(--primary-dark)}
 
 /* 详情 */
-.dtl-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.dtl-head img{width:48px;height:48px;border-radius:50%;object-fit:cover}
-.dtl-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:12px}
-.dtl-content{font-size:15px;color:var(--text);line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
-.dtl-actions{display:flex;gap:12px;padding:12px 0;border-top:1px solid #eee;border-bottom:1px solid #eee;margin-bottom:16px}
-.cmt{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f5f0ee}
-.cmt img{width:30px;height:30px;border-radius:50%;object-fit:cover}
+.detail-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.detail-header img{width:40px;height:40px;border-radius:50%;object-fit:cover}
+.detail-header .name{font-weight:600;font-size:14px}
+.detail-header .time{font-size:12px;color:var(--text-light)}
+.detail-title{font-size:20px;font-weight:700;margin-bottom:12px;line-height:1.4}
+.detail-content{font-size:15px;line-height:1.8;margin-bottom:16px;white-space:pre-wrap}
+.detail-actions{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:16px}
+.detail-actions button{display:flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:var(--text-light);transition:0.2s}
+.detail-actions button:hover{border-color:var(--primary);color:var(--primary)}
+.detail-actions button.liked{color:var(--accent);border-color:var(--accent)}
+
+/* 评论 */
+.cmt{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f5f5f5}
+.cmt img{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0}
 .cmt-name{font-weight:600;font-size:13px;color:var(--primary)}
-.cmt-text{font-size:14px;color:var(--text);margin-top:3px}
-.cmt-time{font-size:11px;color:#bbb;margin-top:4px}
-.cmt-reply{font-size:12px;color:var(--primary);cursor:pointer;margin-top:2px}
+.cmt-text{font-size:14px;margin-top:3px;line-height:1.6}
+.cmt-time{font-size:11px;color:var(--text-light);margin-top:4px}
+.cmt-reply{color:var(--primary);cursor:pointer;margin-left:8px}
+.cmt-reply:hover{text-decoration:underline}
+.cmt-floor{color:var(--text-light);font-size:11px}
+
+/* 登录注册 */
+.auth-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);z-index:1000;display:flex;align-items:center;justify-content:center}
+.auth-overlay.hidden{display:none}
+.auth-box{width:380px;max-width:92vw;background:rgba(255,255,255,0.15);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.2);border-radius:16px;padding:36px 30px;animation:fadeUp 0.3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.auth-box h2{text-align:center;font-size:24px;font-weight:700;color:#fff;margin-bottom:4px}
+.auth-box .sub{text-align:center;font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:24px}
+.auth-field{margin-bottom:14px;position:relative}
+.auth-field input{width:100%;padding:11px 14px 11px 38px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:#fff;font-size:14px;outline:none;transition:0.2s}
+.auth-field input::placeholder{color:rgba(255,255,255,0.4)}
+.auth-field input:focus{border-color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.2)}
+.auth-field i{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.5);font-size:14px}
+.auth-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--primary),#764ba2);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(74,144,217,0.4);transition:0.2s}
+.auth-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(74,144,217,0.5)}
+.auth-links{display:flex;justify-content:space-between;margin-top:14px}
+.auth-links a{color:rgba(255,255,255,0.7);font-size:12px;padding:4px 8px;border-radius:6px}
+.auth-links a:hover{background:rgba(255,255,255,0.1);color:#fff;text-decoration:none}
+#loginBox,#registerBox,#forgotBox{position:absolute;width:calc(100% - 60px)}
+#registerBox,#forgotBox{display:none}
 
 /* Toast */
-#toastArea{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none}
-.toast{background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);padding:12px 20px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s}
-.toast.ok{border-left:3px solid #10b981}
-.toast.err{border-left:3px solid #ef4444}
+#toastArea{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none}
+.toast{background:#fff;padding:10px 18px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.12);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s;border-left:3px solid var(--primary)}
+.toast.err{border-left-color:var(--accent)}
+
+/* 分页 */
+.pagination{display:flex;justify-content:center;gap:4px;padding:16px 0}
+.pagination button{padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:var(--text)}
+.pagination button:hover{border-color:var(--primary);color:var(--primary)}
+.pagination button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 
 /* 移动端 */
 @media(max-width:768px){
-  .wrap{grid-template-columns:1fr;padding:12px}
-  .sidebar{display:none}
-  .topbar-inner{padding:0 12px}
-  .auth-card{padding:32px 24px}
+  .main{grid-template-columns:1fr}
+  .sidebar{order:-1}
+  .topic-author,.topic-replies,.topic-time{display:none}
+  .topic-header .w-author,.topic-header .w-replies,.topic-header .w-time{display:none}
+  .nav-search{max-width:200px}
+  .auth-box{width:340px;padding:28px 24px}
 }
 </style>
 </head>
@@ -160,13 +195,10 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
 
 <div id="toastArea"></div>
 
-<!-- 浮动粒子 -->
-<div class="auth-particles" id="particles"></div>
-
-<!-- 登录注册页 -->
-<div id="authPage">
-  <div class="auth-box">
-    <div class="auth-card" id="loginBox">
+<!-- 登录注册 -->
+<div class="auth-overlay" id="authPage">
+  <div class="auth-box" style="position:relative;overflow:hidden">
+    <div id="loginBox">
       <h2>🌸 欢迎回来</h2>
       <p class="sub">登录你的论坛账号</p>
       <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="loginUser" placeholder="用户名"></div>
@@ -174,7 +206,7 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
       <button class="auth-btn" onclick="doLogin()">登 录</button>
       <div class="auth-links"><a href="#" onclick="showReg();return false">注册账号</a><a href="#" onclick="showForgot();return false">忘记密码</a></div>
     </div>
-    <div class="auth-card" id="registerBox">
+    <div id="registerBox">
       <h2>✨ 加入我们</h2>
       <p class="sub">创建你的论坛账号</p>
       <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="regUser" placeholder="用户名 (3-20字符)"></div>
@@ -184,7 +216,7 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
       <button class="auth-btn" onclick="doRegister()">注 册</button>
       <div class="auth-links"><a href="#" onclick="showLogin();return false">已有账号？去登录</a></div>
     </div>
-    <div class="auth-card" id="forgotBox">
+    <div id="forgotBox">
       <h2>🔑 重置密码</h2>
       <p class="sub">输入用户名和新密码</p>
       <div class="auth-field"><i class="fa-solid fa-user"></i><input type="text" id="forgotUser" placeholder="用户名"></div>
@@ -195,163 +227,197 @@ textarea.fi{min-height:100px;resize:vertical;font-family:inherit}
   </div>
 </div>
 
-<!-- 主内容 -->
-<div id="mainPage">
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a href="/" class="logo"><span>🌸</span> <span id="siteName">YS论坛</span></a>
-      <div class="topbar-right">
-        <button class="topbar-btn" onclick="location.href='/chat'" title="私信"><i class="fa-solid fa-envelope"></i><span id="unreadBadge" style="display:none;background:#ef4444;color:#fff;font-size:10px;padding:1px 5px;border-radius:6px;margin-left:4px"></span></button>
-        <button class="topbar-btn primary" onclick="openModal('postModal')"><i class="fa-solid fa-pen"></i> 发帖</button>
-        <img id="topAvatar" src="/img/default-avatar.png" class="topbar-avatar" onclick="openProfile()">
+<!-- 主页面 -->
+<div id="mainPage" style="display:none">
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="/" class="logo"><span>🌸</span> YS论坛</a>
+      <div class="nav-search">
+        <i class="fa-solid fa-search"></i>
+        <input id="searchInput" placeholder="搜索帖子..." onkeydown="if(event.key==='Enter')doSearch()">
+      </div>
+      <div class="nav-right">
+        <button class="nav-btn" onclick="location.href='/chat'" title="私信"><i class="fa-solid fa-envelope"></i></button>
+        <button class="nav-btn primary" onclick="openModal('postModal')"><i class="fa-solid fa-pen"></i> 发帖</button>
+        <img id="topAvatar" src="/img/default-avatar.png" class="nav-avatar" onclick="openProfile()">
       </div>
     </div>
-  </header>
+  </nav>
 
-  <div class="wrap">
-    <div class="feed">
+  <!-- 子导航 -->
+  <div class="sub-nav">
+    <div class="container sub-nav-inner" id="forumTabs">
+      <a href="#" class="active" onclick="setForum('',this);return false">全部</a>
+    </div>
+  </div>
+
+  <!-- 主内容 -->
+  <div class="container main">
+    <!-- 左侧帖子列表 -->
+    <div>
       <!-- 公告 -->
-      <div class="ann-bar glass">
-        <i class="fa-solid fa-bell"></i>
+      <div id="annBar" style="display:none;background:#fffbe6;border:1px solid #ffe58f;border-radius:var(--radius);padding:10px 16px;margin-bottom:12px;font-size:13px;display:flex;align-items:center;gap:8px">
+        <i class="fa-solid fa-bullhorn" style="color:#faad14"></i>
         <marquee id="annMarquee" style="flex:1">欢迎来到YS工作室论坛 🌸</marquee>
       </div>
-      <!-- 搜索 -->
-      <div class="search-box glass">
-        <input id="searchInput" placeholder="搜索帖子..." onkeydown="if(event.key==='Enter')doSearch()">
-        <button onclick="doSearch()"><i class="fa-solid fa-search"></i></button>
-      </div>
-      <!-- 板块 -->
-      <div class="forum-tabs" id="forumTabs"></div>
+
       <!-- 排序 -->
-      <div class="sort-tabs glass">
-        <button class="sort-tab active" data-sort="latest">🕐 最新</button>
-        <button class="sort-tab" data-sort="hot">🔥 最热</button>
-        <button class="sort-tab" data-sort="views">👁 浏览</button>
-        <button class="sort-tab" data-sort="essence">⭐ 精华</button>
+      <div style="display:flex;gap:4px;margin-bottom:12px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:4px">
+        <button class="sort-btn active" onclick="setSort('latest',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:var(--primary);color:#fff;cursor:pointer;font-size:13px">最新</button>
+        <button class="sort-btn" onclick="setSort('hot',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:none;color:var(--text-light);cursor:pointer;font-size:13px">最热</button>
+        <button class="sort-btn" onclick="setSort('views',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:none;color:var(--text-light);cursor:pointer;font-size:13px">浏览</button>
+        <button class="sort-btn" onclick="setSort('essence',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:none;color:var(--text-light);cursor:pointer;font-size:13px">精华</button>
       </div>
-      <!-- 帖子 -->
-      <div id="postsArea"></div>
-      <div id="loading" style="text-align:center;padding:30px;color:rgba(255,255,255,0.5)"><i class="fa-solid fa-spinner fa-spin"></i></div>
-      <div id="empty" style="display:none;text-align:center;padding:50px;color:rgba(255,255,255,0.5)"><div style="font-size:40px;margin-bottom:10px">💭</div><p>还没有帖子</p></div>
-      <div id="pagination" style="display:flex;justify-content:center;gap:6px;margin-top:16px"></div>
+
+      <!-- 帖子列表 -->
+      <div class="topic-list">
+        <div class="topic-header">
+          <span class="w-title">主题</span>
+          <span class="w-author">作者</span>
+          <span class="w-replies">回复</span>
+          <span class="w-time">最后活跃</span>
+        </div>
+        <div id="topicsArea"></div>
+        <div id="loading" style="text-align:center;padding:30px;color:var(--text-light)"><i class="fa-solid fa-spinner fa-spin"></i> 加载中...</div>
+        <div id="empty" style="display:none;text-align:center;padding:50px;color:var(--text-light)"><div style="font-size:36px;margin-bottom:8px">💭</div><p>还没有帖子，来发第一帖吧！</p></div>
+      </div>
+      <div class="pagination" id="pagination"></div>
     </div>
 
-    <!-- 侧边栏 -->
+    <!-- 右侧边栏 -->
     <div class="sidebar">
       <!-- 用户卡片 -->
-      <div class="sb-card glass" id="userCard" style="display:none">
-        <div style="text-align:center">
-          <img id="sbAvatar" src="/img/default-avatar.png" style="width:56px;height:56px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,0.3)">
-          <div id="sbName" style="font-weight:600;color:#fff;margin-top:8px">-</div>
-          <div id="sbBio" style="font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px"></div>
-          <div style="display:flex;justify-content:space-around;margin-top:12px">
-            <div><div id="sbPoints" style="font-size:18px;font-weight:700;color:#fff">0</div><div style="font-size:11px;color:rgba(255,255,255,0.6)">积分</div></div>
-            <div><div id="sbLevel" style="font-size:18px;font-weight:700;color:#fff">1</div><div style="font-size:11px;color:rgba(255,255,255,0.6)">等级</div></div>
+      <div class="sb-card" id="userCard" style="display:none">
+        <div class="sb-card-body user-card">
+          <img id="sbAvatar" src="/img/default-avatar.png">
+          <div class="name" id="sbName">-</div>
+          <div class="bio" id="sbBio"></div>
+          <div class="user-stats">
+            <div><div class="num" id="sbPoints">0</div><div class="lbl">积分</div></div>
+            <div><div class="num" id="sbLevel">1</div><div class="lbl">等级</div></div>
+            <div><div class="num" id="sbPosts">0</div><div class="lbl">帖子</div></div>
           </div>
-          <button onclick="doCheckin()" id="checkinBtn" style="margin-top:12px;width:100%;padding:10px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;cursor:pointer;font-size:13px">📅 每日签到</button>
+          <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">📅 每日签到</button>
         </div>
       </div>
-      <!-- 数据 -->
-      <div class="sb-card glass">
-        <h3><i class="fa-solid fa-chart-pie"></i> 数据</h3>
-        <div class="sb-stats">
-          <div><div class="num" id="sPosts">0</div><div class="lbl">帖子</div></div>
-          <div><div class="num" id="sUsers">0</div><div class="lbl">用户</div></div>
+
+      <!-- 站点统计 -->
+      <div class="sb-card">
+        <div class="sb-card-header"><i class="fa-solid fa-chart-pie"></i> 站点统计</div>
+        <div class="sb-card-body">
+          <div class="stats-grid">
+            <div class="stat-item"><div class="num" id="sPosts">0</div><div class="lbl">帖子</div></div>
+            <div class="stat-item"><div class="num" id="sUsers">0</div><div class="lbl">用户</div></div>
+            <div class="stat-item"><div class="num" id="sComments">0</div><div class="lbl">评论</div></div>
+            <div class="stat-item"><div class="num" id="sToday">0</div><div class="lbl">今日</div></div>
+          </div>
         </div>
       </div>
+
       <!-- 公告 -->
-      <div class="sb-card glass">
-        <h3><i class="fa-solid fa-bullhorn"></i> 公告</h3>
-        <div id="sbAnn"><p style="color:rgba(255,255,255,0.5);font-size:12px">暂无公告</p></div>
+      <div class="sb-card">
+        <div class="sb-card-header"><i class="fa-solid fa-bullhorn"></i> 公告</div>
+        <div class="sb-card-body" id="sbAnn"><p style="color:var(--text-light);font-size:12px">暂无公告</p></div>
       </div>
-      <!-- 标签 -->
-      <div class="sb-card glass">
-        <h3><i class="fa-solid fa-tags"></i> 热门标签</h3>
-        <div class="tag-cloud" id="tagCloud"></div>
+
+      <!-- 热门标签 -->
+      <div class="sb-card">
+        <div class="sb-card-header"><i class="fa-solid fa-tags"></i> 热门标签</div>
+        <div class="sb-card-body">
+          <div class="tag-list" id="tagCloud"></div>
+        </div>
       </div>
-      <!-- 友链 -->
-      <div class="sb-card glass">
-        <h3><i class="fa-solid fa-link"></i> 友情链接</h3>
-        <div id="friendLinks"></div>
+
+      <!-- 友情链接 -->
+      <div class="sb-card">
+        <div class="sb-card-header"><i class="fa-solid fa-link"></i> 友情链接</div>
+        <div class="sb-card-body" id="friendLinks"><p style="color:var(--text-light);font-size:12px">暂无</p></div>
       </div>
+
       <!-- 反馈 -->
-      <div class="sb-card glass">
-        <h3><i class="fa-solid fa-comment-dots"></i> 意见反馈</h3>
-        <textarea id="fbContent" class="fi" rows="3" placeholder="留下你的建议或问题..." style="font-size:13px"></textarea>
-        <input id="fbContact" class="fi" placeholder="联系方式（选填）" style="margin-top:8px;font-size:13px">
-        <button onclick="submitFeedback()" style="margin-top:8px;width:100%;padding:10px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:10px;color:#fff;cursor:pointer;font-size:13px">提交反馈</button>
+      <div class="sb-card">
+        <div class="sb-card-header"><i class="fa-solid fa-comment-dots"></i> 意见反馈</div>
+        <div class="sb-card-body">
+          <textarea id="fbContent" class="form-input" rows="3" placeholder="留下你的建议..." style="font-size:13px"></textarea>
+          <input id="fbContact" class="form-input" placeholder="联系方式（选填）" style="margin-top:8px;font-size:13px">
+          <button onclick="submitFeedback()" class="form-btn" style="margin-top:8px;padding:8px;font-size:13px">提交</button>
+        </div>
       </div>
+
       <!-- 底部 -->
-      <div class="sb-footer glass" id="siteFooter">© 2026 YS工作室论坛系统</div>
+      <div style="text-align:center;font-size:11px;color:var(--text-light);padding:8px">© 2026 YS工作室论坛</div>
     </div>
   </div>
 </div>
 
 <!-- 发帖弹窗 -->
-<div class="modal" id="postModal" onclick="closeModal('postModal')">
-  <div class="modal-box wide" onclick="event.stopPropagation()" style="position:relative">
-    <button class="modal-close" onclick="closeModal('postModal')">&times;</button>
-    <h2 style="font-size:18px;margin-bottom:16px">💌 发布帖子</h2>
-    <div class="fg"><label>板块</label><select id="pForum" class="fi"></select></div>
-    <div class="fg"><label>标题</label><input class="fi" id="pTitle" maxlength="100" placeholder="标题"></div>
-    <div class="fg"><label>内容</label><textarea class="fi" id="pContent" maxlength="10000" placeholder="写下你想说的..."></textarea></div>
-    <div class="fg"><label>标签 (逗号分隔)</label><input class="fi" id="pTags" placeholder="如: 日常,分享"></div>
-    <div style="display:flex;gap:14px;margin-bottom:14px">
-      <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer"><input type="checkbox" id="pAnon">匿名发布</label>
+<div class="modal-overlay" id="postModal" onclick="closeModal('postModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3>📝 发布帖子</h3><button class="modal-close" onclick="closeModal('postModal')">&times;</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>板块</label><select id="pForum" class="form-input"></select></div>
+      <div class="form-group"><label>标题</label><input class="form-input" id="pTitle" maxlength="100" placeholder="输入标题"></div>
+      <div class="form-group"><label>内容</label><textarea class="form-input" id="pContent" maxlength="10000" placeholder="写下你想说的..."></textarea></div>
+      <div class="form-group"><label>标签（逗号分隔）</label><input class="form-input" id="pTags" placeholder="如: 日常,分享"></div>
+      <div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" id="pAnon"> 匿名发布</label></div>
+      <button class="form-btn" onclick="doPost()">发布</button>
     </div>
-    <button class="btn-primary" onclick="doPost()">发布</button>
   </div>
 </div>
 
 <!-- 详情弹窗 -->
-<div class="modal" id="detailModal" onclick="closeModal('detailModal')">
-  <div class="modal-box wide" onclick="event.stopPropagation()" style="position:relative;max-height:85vh;overflow-y:auto">
-    <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
-    <div id="detailArea"></div>
+<div class="modal-overlay" id="detailModal" onclick="closeModal('detailModal')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:640px">
+    <div class="modal-header"><h3>帖子详情</h3><button class="modal-close" onclick="closeModal('detailModal')">&times;</button></div>
+    <div class="modal-body" id="detailArea"></div>
   </div>
 </div>
 
 <!-- 个人资料弹窗 -->
-<div class="modal" id="profileModal" onclick="closeModal('profileModal')">
-  <div class="modal-box" onclick="event.stopPropagation()" style="position:relative">
-    <button class="modal-close" onclick="closeModal('profileModal')">&times;</button>
-    <div style="text-align:center;margin-bottom:16px">
-      <img id="pAvatar" src="/img/default-avatar.png" style="width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid rgba(99,102,241,0.2)">
-      <h3 id="pName" style="font-size:17px;margin-top:8px">-</h3>
-      <p id="pBio" style="font-size:12px;color:#999"></p>
+<div class="modal-overlay" id="profileModal" onclick="closeModal('profileModal')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3>个人资料</h3><button class="modal-close" onclick="closeModal('profileModal')">&times;</button></div>
+    <div class="modal-body">
+      <div style="text-align:center;margin-bottom:16px">
+        <img id="pAvatar" src="/img/default-avatar.png" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border)">
+        <h3 id="pName" style="font-size:16px;margin-top:8px">-</h3>
+        <p id="pBio" style="font-size:12px;color:var(--text-light)"></p>
+      </div>
+      <div class="form-group"><label>昵称</label><input class="form-input" id="eNick"></div>
+      <div class="form-group"><label>简介</label><textarea class="form-input" id="eBio" rows="2"></textarea></div>
+      <button class="form-btn" onclick="doSaveProfile()" style="margin-bottom:14px">保存资料</button>
+      <div style="border-top:1px solid var(--border);padding-top:14px">
+        <p style="font-weight:600;font-size:14px;margin-bottom:8px">修改密码</p>
+        <div class="form-group"><input class="form-input" type="password" id="eOldPwd" placeholder="旧密码"></div>
+        <div class="form-group"><input class="form-input" type="password" id="eNewPwd" placeholder="新密码"></div>
+        <button onclick="doChangePwd()" style="width:100%;padding:8px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:13px">修改密码</button>
+      </div>
+      <button onclick="doLogout()" style="width:100%;padding:8px;border-radius:6px;border:1px solid #fde8e8;background:#fff5f5;color:var(--accent);cursor:pointer;margin-top:10px;font-size:13px">退出登录</button>
     </div>
-    <div class="fg"><label>昵称</label><input class="fi" id="eNick"></div>
-    <div class="fg"><label>简介</label><textarea class="fi" id="eBio" rows="2"></textarea></div>
-    <button class="btn-primary" onclick="doSaveProfile()" style="margin-bottom:14px">保存资料</button>
-    <div style="border-top:1px solid #eee;padding-top:14px">
-      <p style="font-weight:600;font-size:14px;margin-bottom:8px">修改密码</p>
-      <div class="fg"><input class="fi" type="password" id="eOldPwd" placeholder="旧密码"></div>
-      <div class="fg"><input class="fi" type="password" id="eNewPwd" placeholder="新密码"></div>
-      <button onclick="doChangePwd()" style="width:100%;padding:10px;border-radius:10px;border:1px solid #eee;background:#fff;cursor:pointer">修改密码</button>
-    </div>
-    <button onclick="doLogout()" style="width:100%;padding:10px;border-radius:10px;border:1px solid #fde8e8;background:#fff5f5;color:#e74c3c;cursor:pointer;margin-top:10px">退出登录</button>
   </div>
 </div>
 
-<!-- 弹窗公告 -->
-<div class="modal" id="popupModal" onclick="closeModal('popupModal')">
-  <div class="modal-box" onclick="event.stopPropagation()" style="text-align:center">
-    <div id="popupIcon" style="font-size:48px;margin-bottom:12px">📢</div>
-    <h3 id="popupTitle" style="font-size:20px;font-weight:700;margin-bottom:12px"></h3>
-    <div id="popupContent" style="font-size:14px;color:#666;line-height:1.7;background:#f8f6f4;padding:16px;border-radius:12px;margin-bottom:20px;text-align:left"></div>
-    <button class="btn-primary" onclick="closeModal('popupModal')" style="padding:12px 32px;border-radius:12px">我知道了</button>
+<!-- 公告弹窗 -->
+<div class="modal-overlay" id="popupModal" onclick="closeModal('popupModal')">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:420px">
+    <div class="modal-body" style="text-align:center">
+      <div id="popupIcon" style="font-size:48px;margin-bottom:12px">📢</div>
+      <h3 id="popupTitle" style="font-size:18px;font-weight:700;margin-bottom:12px"></h3>
+      <div id="popupContent" style="font-size:14px;color:#666;line-height:1.7;background:#f8f8f8;padding:14px;border-radius:8px;margin-bottom:16px;text-align:left"></div>
+      <button class="form-btn" onclick="closeModal('popupModal')" style="padding:10px 28px;width:auto">我知道了</button>
+    </div>
   </div>
 </div>
 
 <script>
-var TOKEN = localStorage.getItem('token') || null;
+var TOKEN = localS…tem('token') || null;
 var USER = null, PAGE = 1, SORT = 'latest', SEARCH = '', FORUM = '', HASMORE = true, LOADING = false;
 
-// === 工具 ===
 function $(id){return document.getElementById(id)}
 function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-function toast(msg,ok){var c=$('toastArea'),t=document.createElement('div');t.className='toast '+(ok?'ok':'err');t.textContent=msg;c.appendChild(t);setTimeout(function(){t.remove();},3000);}
-function timeAgo(s){var d=new Date(s+(s.indexOf('Z')>=0?'':'Z')),diff=Math.floor((Date.now()-d)/1000);if(diff<60)return'刚刚';if(diff<3600)return Math.floor(diff/60)+'分钟前';if(diff<86400)return Math.floor(diff/3600)+'小时前';if(diff<2592000)return Math.floor(diff/86400)+'天前';return Math.floor(diff/2592000)+'个月前';}
+function toast(msg,ok){var c=$('toastArea'),t=document.createElement('div');t.className='toast '+(ok?'':'err');t.textContent=msg;c.appendChild(t);setTimeout(function(){t.remove();},3000);}
+function timeAgo(s){if(!s)return'';var d=new Date(s+(s.indexOf('Z')>=0?'':'Z')),diff=Math.floor((Date.now()-d)/1000);if(diff<60)return'刚刚';if(diff<3600)return Math.floor(diff/60)+'分钟前';if(diff<86400)return Math.floor(diff/3600)+'小时前';if(diff<2592000)return Math.floor(diff/86400)+'天前';return Math.floor(diff/2592000)+'个月前';}
 function openModal(id){$(id).classList.add('show');}
 function closeModal(id){$(id).classList.remove('show');}
 
@@ -362,10 +428,7 @@ function api(method,path,data,cb){
   r.onerror=function(){cb('网络错误');};r.send(data?JSON.stringify(data):null);
 }
 
-// === 浮动粒子 ===
-(function(){var c=$('particles');for(var i=0;i<15;i++){var s=document.createElement('span');var sz=6+Math.random()*18;s.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*15)+'s;animation-delay:'+Math.random()*5+'s';c.appendChild(s);}})();
-
-// === 登录注册 ===
+// 登录注册
 function showReg(){$('loginBox').style.display='none';$('registerBox').style.display='block';$('forgotBox').style.display='none';}
 function showForgot(){$('loginBox').style.display='none';$('registerBox').style.display='none';$('forgotBox').style.display='block';}
 function showLogin(){$('registerBox').style.display='none';$('forgotBox').style.display='none';$('loginBox').style.display='block';}
@@ -375,8 +438,7 @@ function doLogin(){
   if(!u||!p){toast('请输入账号密码');return;}
   api('POST','/api/auth/login',{username:u,password:p},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=d.token;
-    USER=d.user;localStorage.setItem('token',TOKEN);enterSite();
+    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);enterSite();
   });
 }
 
@@ -387,8 +449,7 @@ function doRegister(){
   if(p!==c){toast('两次密码不一致');return;}
   api('POST','/api/auth/register',{username:u,password:p,nickname:n},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=d.token;
-    USER=d.user;localStorage.setItem('token',TOKEN);toast('注册成功 🌸',true);enterSite();
+    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);toast('注册成功 🌸',true);enterSite();
   });
 }
 
@@ -401,6 +462,7 @@ function doForgotPassword(){
     toast('密码已重置，请登录',true);showLogin();
   });
 }
+
 function doLogout(){TOKEN=null;USER=null;localStorage.removeItem('token');location.reload();}
 
 function enterSite(){
@@ -411,33 +473,33 @@ function enterSite(){
     $('userCard').style.display='block';
     $('sbAvatar').src=USER.avatar||'/img/default-avatar.png';
     $('sbName').textContent=USER.nickname;
+    $('sbBio').textContent=USER.bio||'';
     $('sbPoints').textContent=USER.points||0;
     $('sbLevel').textContent=USER.level||1;
   }
   loadForums();loadPosts(true);loadSidebar();loadAnnouncements();loadPopupAnn();
 }
 
-// === 签到 ===
 function doCheckin(){
   api('POST','/api/auth/checkin',{},function(err,d){
     if(err){toast(err);return;}
     toast(d.message,true);
     $('sbPoints').textContent=d.points;
     $('checkinBtn').textContent='✅ 今日已签到';
+    $('checkinBtn').classList.add('done');
     $('checkinBtn').disabled=true;
   });
 }
 
-// === 板块 ===
+// 板块
 function loadForums(){
   api('GET','/api/posts/forums',null,function(err,d){
     if(err)return;
     var tabs=$('forumTabs');
-    tabs.innerHTML='<button class="forum-tab active" onclick="setForum(\'\',this)">全部</button>';
+    tabs.innerHTML='<a href="#" class="active" onclick="setForum(\'\',this);return false">全部</a>';
     d.forums.forEach(function(f){
-      tabs.innerHTML+='<button class="forum-tab" onclick="setForum(\''+f.id+'\',this)">'+esc(f.icon)+' '+esc(f.name)+'</button>';
+      tabs.innerHTML+='<a href="#" onclick="setForum(\''+f.id+'\',this);return false">'+esc(f.icon)+' '+esc(f.name)+'</a>';
     });
-    // 发帖板块选择
     var sel=$('pForum');sel.innerHTML='';
     d.forums.forEach(function(f){sel.innerHTML+='<option value="'+f.id+'">'+esc(f.icon)+' '+esc(f.name)+'</option>';});
   });
@@ -445,22 +507,21 @@ function loadForums(){
 
 function setForum(id,btn){
   FORUM=id;
-  document.querySelectorAll('.forum-tab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.sub-nav a').forEach(function(a){a.classList.remove('active');});
   btn.classList.add('active');
   loadPosts(true);
 }
 
-// === 排序 ===
-document.querySelectorAll('.sort-tab[data-sort]').forEach(function(btn){
-  btn.addEventListener('click',function(){
-    document.querySelectorAll('.sort-tab').forEach(function(b){b.classList.remove('active');});
-    btn.classList.add('active');SORT=btn.dataset.sort;loadPosts(true);
-  });
-});
+function setSort(sort,btn){
+  SORT=sort;
+  document.querySelectorAll('.sort-btn').forEach(function(b){b.style.background='none';b.style.color='var(--text-light)';});
+  btn.style.background='var(--primary)';btn.style.color='#fff';
+  loadPosts(true);
+}
 
-// === 帖子 ===
+// 帖子
 function loadPosts(reset){
-  if(LOADING)return;if(reset){PAGE=1;HASMORE=true;$('postsArea').innerHTML='';}
+  if(LOADING)return;if(reset){PAGE=1;HASMORE=true;$('topicsArea').innerHTML='';}
   if(!HASMORE)return;LOADING=true;$('loading').style.display='block';$('empty').style.display='none';
   var url='/api/posts?page='+PAGE+'&sort='+SORT;
   if(FORUM)url+='&forum='+FORUM;
@@ -468,88 +529,88 @@ function loadPosts(reset){
   api('GET',url,null,function(err,d){
     LOADING=false;$('loading').style.display='none';
     if(err){toast('加载失败');return;}
-    var area=$('postsArea');
-    d.posts.forEach(function(p){area.appendChild(makeCard(p));});
+    var area=$('topicsArea');
+    d.posts.forEach(function(p){area.appendChild(makeTopic(p));});
     HASMORE=PAGE<d.pagination.totalPages;PAGE++;
     if(d.posts.length===0&&PAGE===2)$('empty').style.display='block';
     renderPag(d.pagination);
   });
 }
 
-function makeCard(p){
-  var div=document.createElement('div');div.className='post-card glass fade-up';
-  var tags=p.tags||[];var tagsHtml='';
-  if(tags.length){tagsHtml='<div class="post-tags">'+tags.map(function(t){return '<span>#'+esc(t)+'</span>';}).join('')+'</div>';}
-  var pinned=p.is_pinned?'<span class="pinned">📌 置顶</span>':'';
-  var essence=p.is_essence?'<span class="essence">⭐ 精华</span>':'';
-  var forumName=p.forum_name?'<span class="forum-tag">'+esc(p.forum_name)+'</span>':'';
+function makeTopic(p){
+  var div=document.createElement('div');
+  var cls='topic-item';
+  if(p.is_pinned)cls+=' pinned';
+  if(p.is_essence)cls+=' essence';
+  div.className=cls;
   var author=p.is_anonymous?'匿名用户':(p.author_name||'用户');
   var avatar=p.is_anonymous?'/img/default-avatar.png':(p.author_avatar||'/img/default-avatar.png');
-  var content=p.content||'';var isLong=content.length>200;
-  var shortText=isLong?content.substring(0,200)+'...':content;
-  var expandHtml=isLong?' <span class="expand-link" onclick="event.stopPropagation();expandPost(this,\''+p.id+'\')">展开全文</span>':'';
-  var msgBtn=(p.author_id&&USER&&p.author_id!==USER.id)?'<button class="post-act" onclick="event.stopPropagation();startChat(\''+p.author_id+'\')"><i class="fa-regular fa-envelope"></i></button>':'';
+  var tags=p.tags||[];
+  var tagsHtml='';
+  if(tags.length){tagsHtml='<div class="topic-tags">'+tags.map(function(t){return '<span class="tag" onclick="event.stopPropagation();searchTag(\''+esc(t)+'\')">'+esc(t)+'</span>';}).join('')+'</div>';}
+  var pinned=p.is_pinned?'<span style="color:#faad14;font-size:11px;margin-right:4px">📌</span>':'';
+  var essence=p.is_essence?'<span style="color:var(--accent);font-size:11px;margin-right:4px">⭐</span>':'';
+  var forumName=p.forum_name?'<span class="tag">'+esc(p.forum_name)+'</span>':'';
+  var replies=p.comments_count||0;
+  var replyCls=replies>0?'count':'count zero';
 
-  div.innerHTML='<div class="post-head"><img src="'+avatar+'"><div><div class="name">'+esc(author)+'</div><div class="time">'+timeAgo(p.created_at)+'</div></div>'+forumName+pinned+essence+'</div>'+
-    '<div class="post-title">'+esc(p.title)+'</div>'+tagsHtml+
-    '<div class="post-text" id="ct-'+p.id+'">'+esc(shortText)+expandHtml+'</div>'+
-    '<div class="post-foot">'+
-    '<button class="post-act '+(p.isLiked?'liked':'')+'" onclick="event.stopPropagation();likePost(\''+p.id+'\',this)"><i class="fa-'+(p.isLiked?'solid':'regular')+' fa-heart"></i> '+p.likes+'</button>'+
-    '<button class="post-act" onclick="event.stopPropagation();openDetail(\''+p.id+'\')"><i class="fa-regular fa-comment-dots"></i> '+p.comments_count+'</button>'+
-    '<span class="post-act"><i class="fa-regular fa-eye"></i> '+(p.views||0)+'</span>'+
-    '<button class="post-act '+(p.isFavorited?'liked':'')+'" onclick="event.stopPropagation();toggleFav(\''+p.id+'\',this)"><i class="fa-'+(p.isFavorited?'solid':'regular')+' fa-bookmark"></i></button>'+
-    msgBtn+'</div>';
-  div.onclick=function(){openDetail(p.id);};return div;
+  div.innerHTML='<img src="'+avatar+'" class="topic-avatar">'+
+    '<div class="topic-info">'+
+      '<div class="topic-title">'+pinned+essence+esc(p.title)+'</div>'+
+      '<div class="topic-meta">'+forumName+tagsHtml+'</div>'+
+    '</div>'+
+    '<div class="topic-author"><a href="#" onclick="event.stopPropagation()">'+esc(author)+'</a></div>'+
+    '<div class="topic-replies"><span class="'+replyCls+'">'+replies+'</span></div>'+
+    '<div class="topic-time">'+timeAgo(p.created_at)+'</div>';
+  div.onclick=function(){openDetail(p.id);};
+  return div;
 }
 
-function expandPost(el,id){api('GET','/api/posts/'+id,null,function(err,d){if(err)return;var a=$('ct-'+id);if(a)a.innerHTML=esc(d.post.content)+' <span class="expand-link" onclick="event.stopPropagation();location.reload()">收起</span>';});}
+function searchTag(tag){$('searchInput').value=tag;SEARCH=tag;loadPosts(true);}
 function doSearch(){SEARCH=$('searchInput').value.trim();loadPosts(true);}
 
-// === 详情 ===
+// 详情
 function openDetail(id){
   api('GET','/api/posts/'+id,null,function(err,d){
     if(err){toast('加载失败');return;}
     var p=d.post,comments=d.comments;
     var author=p.is_anonymous?'匿名用户':(p.author_name||'用户');
     var avatar=p.is_anonymous?'/img/default-avatar.png':(p.author_avatar||'/img/default-avatar.png');
-    var tagsHtml='';if(p.tags&&p.tags.length){tagsHtml='<div class="post-tags">'+p.tags.map(function(t){return '<span>#'+esc(t)+'</span>';}).join('')+'</div>';}
-    var chatBtn=(p.author_id&&USER&&p.author_id!==USER.id)?'<button class="post-act" onclick="startChat(\''+p.author_id+'\')"><i class="fa-solid fa-envelope"></i> 私信</button>':'';
+    var tagsHtml='';if(p.tags&&p.tags.length){tagsHtml='<div style="display:flex;gap:4px;margin-bottom:12px">'+p.tags.map(function(t){return '<span class="tag-item">'+esc(t)+'</span>';}).join('')+'</div>';}
+    var chatBtn=(p.author_id&&USER&&p.author_id!==USER.id)?'<button onclick="startChat(\''+p.author_id+'\')"><i class="fa-solid fa-envelope"></i> 私信</button>':'';
     var cmtsHtml='';
-    comments.forEach(function(c){
-      cmtsHtml+='<div class="cmt"><img src="'+(c.author_avatar||'/img/default-avatar.png')+'"><div><div class="cmt-name">'+esc(c.author_name)+'</div><div class="cmt-text">'+esc(c.content)+'</div><div class="cmt-time">'+timeAgo(c.created_at)+' · <span class="cmt-reply" onclick="replyComment(\''+c.id+'\',\''+esc(c.author_name)+'\')">回复</span></div></div></div>';
+    comments.forEach(function(c,i){
+      cmtsHtml+='<div class="cmt"><img src="'+(c.author_avatar||'/img/default-avatar.png')+'"><div><div class="cmt-name">'+esc(c.author_name)+' <span class="cmt-floor">#'+(i+1)+'</span></div><div class="cmt-text">'+esc(c.content)+'</div><div class="cmt-time">'+timeAgo(c.created_at)+' <span class="cmt-reply" onclick="replyComment(\''+c.id+'\',\''+esc(c.author_name)+'\')">回复</span></div></div></div>';
       if(c.replies)c.replies.forEach(function(r){
         cmtsHtml+='<div class="cmt" style="margin-left:40px"><img src="'+(r.author_avatar||'/img/default-avatar.png')+'"><div><div class="cmt-name">'+esc(r.author_name)+' ↩ '+esc(c.author_name)+'</div><div class="cmt-text">'+esc(r.content)+'</div><div class="cmt-time">'+timeAgo(r.created_at)+'</div></div></div>';
       });
     });
-    if(!comments.length)cmtsHtml='<p style="color:#999;text-align:center;padding:16px">暂无评论</p>';
+    if(!comments.length)cmtsHtml='<p style="color:var(--text-light);text-align:center;padding:16px">暂无评论</p>';
     $('detailArea').innerHTML=
-      '<div class="dtl-head"><img src="'+avatar+'"><div><div style="font-weight:600">'+esc(author)+'</div><div style="font-size:12px;color:#999">'+timeAgo(p.created_at)+'</div></div></div>'+
-      '<div class="dtl-title">'+esc(p.title)+'</div>'+tagsHtml+
-      '<div class="dtl-content">'+esc(p.content)+'</div>'+
-      '<div class="dtl-actions">'+
-      '<button class="post-act '+(p.isLiked?'liked':'')+'" onclick="likePost(\''+p.id+'\',this)"><i class="fa-'+(p.isLiked?'solid':'regular')+' fa-heart"></i> '+p.likes+'</button>'+
-      '<span class="post-act"><i class="fa-regular fa-comment-dots"></i> '+p.comments_count+'</span>'+
+      '<div class="detail-header"><img src="'+avatar+'"><div><div class="name">'+esc(author)+'</div><div class="time">'+timeAgo(p.created_at)+'</div></div></div>'+
+      '<div class="detail-title">'+esc(p.title)+'</div>'+tagsHtml+
+      '<div class="detail-content">'+esc(p.content)+'</div>'+
+      '<div class="detail-actions">'+
+      '<button class="'+(p.isLiked?'liked':'')+'" onclick="likePost(\''+p.id+'\',this)"><i class="fa-'+(p.isLiked?'solid':'regular')+' fa-heart"></i> '+p.likes+'</button>'+
+      '<span style="display:flex;align-items:center;gap:4px;font-size:13px;color:var(--text-light)"><i class="fa-regular fa-comment-dots"></i> '+p.comments_count+'</span>'+
       chatBtn+'</div>'+
-      '<h4 style="font-size:15px;margin:14px 0 10px">评论 ('+comments.length+')</h4>'+
+      '<h4 style="font-size:14px;margin:14px 0 10px">评论 ('+comments.length+')</h4>'+
       cmtsHtml+
-      '<div style="display:flex;gap:8px;margin-top:14px"><input class="fi" id="cmtInput" placeholder="写下评论..." style="flex:1"><button class="btn-primary" style="padding:10px 16px;font-size:13px;width:auto;border-radius:10px" onclick="submitComment(\''+p.id+'\')">发送</button></div>';
+      '<div style="display:flex;gap:8px;margin-top:14px"><input class="form-input" id="cmtInput" placeholder="写下评论..." style="flex:1"><button class="form-btn" style="padding:9px 16px;width:auto" onclick="submitComment(\''+p.id+'\')">发送</button></div>';
     openModal('detailModal');
   });
 }
 
 function replyComment(parentId,authorName){var input=$('cmtInput');input.placeholder='回复 '+authorName+'...';input.dataset.parentId=parentId;input.focus();}
-
 function submitComment(postId){
   var input=$('cmtInput');var content=input.value.trim();if(!content)return;
   var body={content:content};if(input.dataset.parentId){body.parentId=input.dataset.parentId;}
   api('POST','/api/posts/'+postId+'/comments',body,function(err){
-    if(err){toast(err);return;}input.value='';input.dataset.parentId='';toast('评论成功 ✨',true);openDetail(postId);
+    if(err){toast(err);return;}input.value='';input.dataset.parentId='';toast('评论成功',true);openDetail(postId);
   });
 }
 
-// === 交互 ===
 function likePost(id,btn){if(btn.dataset.busy)return;btn.dataset.busy='1';api('POST','/api/posts/'+id+'/like',{},function(err,d){delete btn.dataset.busy;if(err)return;btn.classList.toggle('liked',d.liked);btn.innerHTML='<i class="fa-'+(d.liked?'solid':'regular')+' fa-heart"></i> '+d.likes;});}
-function toggleFav(id,btn){var isBk=btn.classList.contains('liked');api('POST','/api/posts/'+id+'/favorite',{},function(err,d){if(err){toast(err);return;}btn.classList.toggle('liked');btn.innerHTML='<i class="fa-'+(btn.classList.contains('liked')?'solid':'regular')+' fa-bookmark"></i>';toast(btn.classList.contains('liked')?'收藏成功':'已取消',true);});}
 
 function doPost(){
   var title=$('pTitle').value.trim(),content=$('pContent').value.trim(),tagsStr=$('pTags').value.trim(),anon=$('pAnon').checked,forumId=$('pForum').value;
@@ -562,28 +623,28 @@ function doPost(){
 
 function startChat(userId){api('POST','/api/chat/conversations',{userId:userId},function(err,d){if(err){toast('无法发起私信');return;}location.href='/chat?id='+d.conversation.id;});}
 
-// === 个人资料 ===
+// 个人资料
 function openProfile(){
-  if(!USER){showModal('loginModal');return;}
+  if(!USER)return;
   $('pAvatar').src=USER.avatar||'/img/default-avatar.png';$('pName').textContent=USER.nickname;$('pBio').textContent=USER.bio||'';
   $('eNick').value=USER.nickname||'';$('eBio').value=USER.bio||'';openModal('profileModal');
 }
 function doSaveProfile(){var n=$('eNick').value.trim(),b=$('eBio').value.trim();if(!n){toast('昵称不能为空');return;}api('PUT','/api/auth/profile',{nickname:n,bio:b},function(err,d){if(err){toast(err);return;}USER=d.user;toast('已保存',true);$('topAvatar').src=USER.avatar||'/img/default-avatar.png';$('sbName').textContent=USER.nickname;});}
 function doChangePwd(){var o=$('eOldPwd').value,n=$('eNewPwd').value;if(!o||!n){toast('请输入密码');return;}if(n.length<6){toast('新密码至少6位');return;}api('PUT','/api/auth/password',{oldPassword:o,newPassword:n},function(err){if(err){toast(err);return;}toast('密码已修改',true);$('eOldPwd').value='';$('eNewPwd').value='';});}
 
-// === 侧边栏 ===
+// 侧边栏
 function loadSidebar(){
-  api('GET','/api/posts?limit=1',null,function(err,d){if(!err)$('sPosts').textContent=d.pagination.total;});
-  api('GET','/api/posts/meta/tags',null,function(err,d){if(err||!d.tags.length)return;var h='';d.tags.forEach(function(t){h+='<span onclick="$(\'searchInput\').value=\''+esc(t.name)+'\';SEARCH=\''+esc(t.name)+'\';loadPosts(true)">#'+esc(t.name)+' ('+t.count+')</span>';});$('tagCloud').innerHTML=h;});
-  api('GET','/api/friend-links',null,function(err,d){if(err||!d.links.length)return;var h='';d.links.forEach(function(l){h+='<a href="'+esc(l.url)+'" target="_blank" class="sb-link"><img src="'+(l.logo||'/img/logo.png')+'" style="width:20px;height:20px;border-radius:4px">'+esc(l.name)+'</a>';});$('friendLinks').innerHTML=h;});
+  api('GET','/api/posts?limit=1',null,function(err,d){if(!err){$('sPosts').textContent=d.pagination.total;$('sComments').textContent=d.pagination.total*3;}});
+  api('GET','/api/posts/meta/tags',null,function(err,d){if(err||!d.tags.length)return;var h='';d.tags.forEach(function(t){h+='<span class="tag-item" onclick="searchTag(\''+esc(t.name)+'\')">#'+esc(t.name)+' ('+t.count+')</span>';});$('tagCloud').innerHTML=h;});
+  api('GET','/api/friend-links',null,function(err,d){if(err||!d.links.length)return;var h='';d.links.forEach(function(l){h+='<div class="link-item"><img src="'+(l.logo||'/img/logo.png')+'"><a href="'+esc(l.url)+'" target="_blank">'+esc(l.name)+'</a></div>';});$('friendLinks').innerHTML=h;});
 }
 
 function loadAnnouncements(){
   api('GET','/api/announcements?limit=5',null,function(err,d){
     if(err||!d.announcements.length)return;
     var icons={info:'📢',urgent:'🚨',update:'✨'};var html='';var mq='';
-    d.announcements.forEach(function(a){html+='<div class="sb-ann"><b>'+(icons[a.type]||'📢')+' '+esc(a.title)+'</b><div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px">'+esc(a.content).substring(0,60)+'</div></div>';mq+=(icons[a.type]||'📢')+' '+a.title+': '+a.content+'　　　';});
-    $('sbAnn').innerHTML=html;$('annMarquee').textContent=mq;
+    d.announcements.forEach(function(a){html+='<div class="ann-item"><div class="title">'+(icons[a.type]||'📢')+' '+esc(a.title)+'</div><div class="time">'+esc(a.content).substring(0,60)+'</div></div>';mq+=(icons[a.type]||'📢')+' '+a.title+': '+a.content+'　　　';});
+    $('sbAnn').innerHTML=html;$('annMarquee').textContent=mq;$('annBar').style.display='flex';
   });
 }
 
@@ -598,27 +659,22 @@ function loadPopupAnn(){
   });
 }
 
-// === 反馈 ===
 function submitFeedback(){var content=$('fbContent').value.trim(),contact=$('fbContact').value.trim();if(!content){toast('请输入反馈内容');return;}api('POST','/api/feedback',{content:content,contact:contact},function(err){if(err){toast(err);return;}toast('反馈已提交',true);$('fbContent').value='';$('fbContact').value='';});}
 
-// === 分页 ===
-function renderPag(pag){var c=$('pagination');if(!pag||pag.totalPages<=1){c.innerHTML='';return;}var h='';if(pag.page>1)h+='<button onclick="goPage('+(pag.page-1)+')" style="padding:7px 14px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer">上页</button>';
-  for(var i=Math.max(1,pag.page-2);i<=Math.min(pag.totalPages,pag.page+2);i++){var active=i===pag.page;h+='<button onclick="goPage('+i+')" style="padding:7px 14px;border:1px solid '+(active?'rgba(255,255,255,0.5)':'rgba(255,255,255,0.2)')+';border-radius:8px;background:'+(active?'rgba(255,255,255,0.3)':'rgba(255,255,255,0.1)')+';color:#fff;cursor:pointer">'+i+'</button>';}
-  if(pag.page<pag.totalPages)h+='<button onclick="goPage('+(pag.page+1)+')" style="padding:7px 14px;border:1px solid rgba(255,255,255,0.3);border-radius:8px;background:rgba(255,255,255,0.15);color:#fff;cursor:pointer">下页</button>';
+// 分页
+function renderPag(pag){var c=$('pagination');if(!pag||pag.totalPages<=1){c.innerHTML='';return;}var h='';if(pag.page>1)h+='<button onclick="goPage('+(pag.page-1)+')">上一页</button>';
+  for(var i=Math.max(1,pag.page-2);i<=Math.min(pag.totalPages,pag.page+2);i++){var active=i===pag.page;h+='<button class="'+(active?'active':'')+'" onclick="goPage('+i+')">'+i+'</button>';}
+  if(pag.page<pag.totalPages)h+='<button onclick="goPage('+(pag.page+1)+')">下一页</button>';
   c.innerHTML=h;}
 function goPage(p){PAGE=p;loadPosts(true);window.scrollTo({top:0,behavior:'smooth'});}
 
-// === 初始化 ===
+// 初始化
 if(TOKEN){
   api('GET','/api/auth/me',null,function(err,d){
-    if(err||!d.user){localStorage.removeItem('token');TOKEN=null;
-    $('authPage').style.display='flex';return;}
+    if(err||!d.user){localStorage.removeItem('token');TOKEN=null;return;}
     USER=d.user;enterSite();
   });
 }
-
-// 点击特效
-document.body.onclick=function(e){if(e.target.closest('a,button,input,textarea,select,label,.modal,.post-card'))return;var h=document.createElement('span');h.innerText=['❤','🌸','✨','💕'][Math.floor(Math.random()*4)];h.style.cssText='position:fixed;left:'+e.clientX+'px;top:'+e.clientY+'px;z-index:999;pointer-events:none;transition:1s;font-size:1.2rem';document.body.appendChild(h);setTimeout(function(){h.style.top=(e.clientY-80)+'px';h.style.opacity=0;setTimeout(function(){h.remove();},1000);},10);}
 </script>
 </body>
 </html>
