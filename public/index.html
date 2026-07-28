@@ -514,7 +514,7 @@ function doLogin(){
   if(!u||!p){toast('请输入账号密码');return;}
   api('POST','/api/auth/login',{username:u,password:p},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=d.token;USER=d.user;localStorage.setIteme();
+    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);enterSite();
   });
 }
 
@@ -525,7 +525,7 @@ function doRegister(){
   if(p!==c){toast('两次密码不一致');return;}
   api('POST','/api/auth/register',{username:u,password:p,nickname:n},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=d.token;USER=d.user;localStorage.setItem注册成功 🌸',true);enterSite();
+    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);toast('注册成功 🌸',true);enterSite();
   });
 }
 
@@ -539,7 +539,7 @@ function doForgotPassword(){
   });
 }
 
-function doLogout(){TOKEN=null;USER=null;localStoragetem('token');location.reload();}
+function doLogout(){TOKEN=null;USER=null;localStorage.removeItem('token');location.reload();}
 
 function enterSite(){
   $('authPage').classList.add('hidden');
