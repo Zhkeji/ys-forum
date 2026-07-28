@@ -377,6 +377,7 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         <div class="sb-card-body user-card">
           <img id="sbAvatar" src="/img/default-avatar.png">
           <div class="name" id="sbName">-</div>
+          <div id="sbRole" style="margin-top:4px"></div>
           <div class="bio" id="sbBio"></div>
           <div class="user-stats">
             <div><div class="num" id="sbPoints">0</div><div class="lbl">积分</div></div>
@@ -384,6 +385,10 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
             <div><div class="num" id="sbPosts">0</div><div class="lbl">帖子</div></div>
           </div>
           <button class="checkin-btn" id="checkinBtn" onclick="doCheckin()">📅 每日签到</button>
+          <div style="margin-top:10px;display:flex;gap:6px">
+            <button onclick="openProfile()" style="flex:1;padding:6px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:12px">个人资料</button>
+            <button onclick="location.href='/chat'" style="flex:1;padding:6px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:12px">我的私信</button>
+          </div>
         </div>
       </div>
 
@@ -462,6 +467,12 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         <img id="pAvatar" src="/img/default-avatar.png" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid var(--border)">
         <h3 id="pName" style="font-size:16px;margin-top:8px">-</h3>
         <p id="pBio" style="font-size:12px;color:var(--text-light)"></p>
+        <div id="pRole" style="margin-top:8px"></div>
+        <div style="display:flex;justify-content:center;gap:20px;margin-top:12px">
+          <div><div style="font-size:18px;font-weight:700" id="pPoints">0</div><div style="font-size:11px;color:var(--text-light)">积分</div></div>
+          <div><div style="font-size:18px;font-weight:700" id="pLevel">1</div><div style="font-size:11px;color:var(--text-light)">等级</div></div>
+          <div><div style="font-size:18px;font-weight:700" id="pExp">0</div><div style="font-size:11px;color:var(--text-light)">经验</div></div>
+        </div>
       </div>
       <div class="form-group"><label>昵称</label><input class="form-input" id="eNick"></div>
       <div class="form-group"><label>简介</label><textarea class="form-input" id="eBio" rows="2"></textarea></div>
@@ -572,6 +583,12 @@ function enterSite(){
     $('sbBio').textContent=USER.bio||'';
     $('sbPoints').textContent=USER.points||0;
     $('sbLevel').textContent=USER.level||1;
+    var roleHtml='';
+    if(USER.role==='super_admin')roleHtml='<span style="display:inline-block;padding:2px 8px;background:#ffe4e8;color:#e74c3c;border-radius:4px;font-size:11px">👑 超级管理员</span>';
+    else if(USER.role==='admin')roleHtml='<span style="display:inline-block;padding:2px 8px;background:#e8f4fd;color:#4a90d9;border-radius:4px;font-size:11px">🔧 管理员</span>';
+    else roleHtml='<span style="display:inline-block;padding:2px 8px;background:#f0f0f0;color:#999;border-radius:4px;font-size:11px">👤 普通用户</span>';
+    if(USER.verified_identity)roleHtml+='<span style="display:inline-block;padding:2px 8px;background:#f0e8ff;color:#7c3aed;border-radius:4px;font-size:11px;margin-left:4px">✓ '+esc(USER.verified_identity)+'</span>';
+    $('sbRole').innerHTML=roleHtml;
   }
   loadForums();loadPosts(true);loadSidebar();loadAnnouncements();loadPopupAnn();loadSiteFooter();
 }
@@ -727,7 +744,15 @@ function startChat(userId){api('POST','/api/chat/conversations',{userId:userId},
 function openProfile(){
   if(!USER)return;
   $('pAvatar').src=USER.avatar||'/img/default-avatar.png';$('pName').textContent=USER.nickname;$('pBio').textContent=USER.bio||'';
-  $('eNick').value=USER.nickname||'';$('eBio').value=USER.bio||'';openModal('profileModal');loadIdentityStatus();
+  $('eNick').value=USER.nickname||'';$('eBio').value=USER.bio||'';
+  $('pPoints').textContent=USER.points||0;$('pLevel').textContent=USER.level||1;$('pExp').textContent=USER.exp||0;
+  var roleHtml='';
+  if(USER.role==='super_admin')roleHtml='<span style="display:inline-block;padding:3px 10px;background:#ffe4e8;color:#e74c3c;border-radius:6px;font-size:12px">👑 超级管理员</span>';
+  else if(USER.role==='admin')roleHtml='<span style="display:inline-block;padding:3px 10px;background:#e8f4fd;color:#4a90d9;border-radius:6px;font-size:12px">🔧 管理员</span>';
+  else roleHtml='<span style="display:inline-block;padding:3px 10px;background:#f0f0f0;color:#999;border-radius:6px;font-size:12px">👤 普通用户</span>';
+  if(USER.verified_identity)roleHtml+='<span style="display:inline-block;padding:3px 10px;background:#f0e8ff;color:#7c3aed;border-radius:6px;font-size:12px;margin-left:4px">✓ '+esc(USER.verified_identity)+'</span>';
+  $('pRole').innerHTML=roleHtml;
+  openModal('profileModal');loadIdentityStatus();
 }
 function doSaveProfile(){var n=$('eNick').value.trim(),b=$('eBio').value.trim();if(!n){toast('昵称不能为空');return;}api('PUT','/api/auth/profile',{nickname:n,bio:b},function(err,d){if(err){toast(err);return;}USER=d.user;toast('已保存',true);$('topAvatar').src=USER.avatar||'/img/default-avatar.png';$('sbName').textContent=USER.nickname;});}
 function loadIdentityStatus(){api('GET','/api/auth/my-identity',null,function(err,d){if(err)return;var s=$('identityStatus');var f=$('identityForm');if(d.verifications.length){var v=d.verifications[0];if(v.status==='pending'){s.innerHTML='<div style="padding:8px;background:#fff3e0;border-radius:6px;font-size:12px;color:#ff9500;margin-bottom:8px">⏳ 认证审核中: '+esc(v.identity_name)+'</div>';f.style.display='none';}else if(v.status==='approved'){s.innerHTML='<div style="padding:8px;background:#e8fde8;border-radius:6px;font-size:12px;color:#52c41a;margin-bottom:8px">✅ 已认证: '+esc(v.identity_name)+'</div>';f.style.display='none';}else{s.innerHTML='<div style="padding:8px;background:#fce4ec;border-radius:6px;font-size:12px;color:#ff3b5c;margin-bottom:8px">❌ 已驳回: '+esc(v.admin_note||'未通过')+'</div>';f.style.display='block';}}else{f.style.display='block';}});}
