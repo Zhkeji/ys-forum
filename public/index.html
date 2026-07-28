@@ -13,7 +13,53 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Micr
 a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 .container{max-width:1100px;margin:0 auto;padding:0 16px}
 
-/* 顶部导航 */
+/* 登录注册页面 */
+.auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:#0a0a1a;overflow:auto}
+.auth-overlay.hidden{display:none}
+.auth-bg{position:fixed;inset:0;overflow:hidden;pointer-events:none}
+.auth-bg .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.6;animation:orbFloat 8s ease-in-out infinite}
+.auth-bg .orb:nth-child(1){width:400px;height:400px;background:#667eea;top:-10%;left:-5%}
+.auth-bg .orb:nth-child(2){width:350px;height:350px;background:#764ba2;bottom:-10%;right:-5%;animation-delay:2s}
+.auth-bg .orb:nth-child(3){width:300px;height:300px;background:#f093fb;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:4s}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-30px) scale(1.1)}50%{transform:translate(-20px,20px) scale(0.9)}75%{transform:translate(20px,10px) scale(1.05)}}
+.auth-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.auth-container{position:relative;z-index:2;display:flex;width:900px;max-width:95vw;min-height:520px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.5);animation:authSlideIn 0.6s ease}
+@keyframes authSlideIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.auth-brand{flex:1;background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);padding:48px 36px;display:flex;flex-direction:column;justify-content:center}
+.auth-brand h1{font-size:32px;font-weight:800;color:#fff;margin-bottom:8px}
+.auth-brand p{font-size:15px;color:rgba(255,255,255,0.85);line-height:1.6}
+.auth-brand .brand-icon{font-size:48px;margin-bottom:16px}
+.auth-brand .features{margin-top:24px}
+.auth-brand .features div{display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px}
+.auth-brand .features i{color:#ffd700}
+.auth-forms{flex:1;background:rgba(15,15,35,0.95);padding:48px 36px;display:flex;flex-direction:column;justify-content:center}
+.auth-tabs{display:flex;gap:0;margin-bottom:28px;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px}
+.auth-tab{flex:1;padding:10px;text-align:center;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.5);transition:0.3s;border:none;background:none}
+.auth-tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,0.4)}
+.auth-form{display:none}
+.auth-form.active{display:block}
+.auth-form h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
+.auth-form .sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:24px}
+.auth-field{margin-bottom:16px}
+.auth-field label{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.auth-field .input-wrap{position:relative}
+.auth-field input{width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;outline:none;transition:0.3s}
+.auth-field input::placeholder{color:rgba(255,255,255,0.25)}
+.auth-field input:focus{border-color:#667eea;background:rgba(255,255,255,0.1);box-shadow:0 0 0 4px rgba(102,126,234,0.15)}
+.auth-field .field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:15px;pointer-events:none}
+.auth-btn{width:100%;padding:13px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(102,126,234,0.4);transition:0.3s;margin-top:4px}
+.auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(102,126,234,0.5)}
+.auth-links{display:flex;justify-content:space-between;margin-top:16px}
+.auth-links a{color:rgba(255,255,255,0.5);font-size:12px;padding:6px 10px;border-radius:8px;transition:0.2s}
+.auth-links a:hover{color:#fff;background:rgba(255,255,255,0.05);text-decoration:none}
+.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1)}
+.auth-divider span{font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px}
+.social-btns{display:flex;gap:10px}
+.social-btn{flex:1;padding:10px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:rgba(255,255,255,0.03);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;transition:0.2s}
+.social-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2)}
+
+/* 主页面导航 */
 .navbar{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
 .navbar-inner{display:flex;align-items:center;height:52px;gap:20px}
 .logo{font-size:20px;font-weight:700;color:var(--primary);display:flex;align-items:center;gap:6px;white-space:nowrap}
@@ -28,19 +74,12 @@ a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 .nav-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
 .nav-btn.primary:hover{background:var(--primary-dark)}
 .nav-avatar{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid var(--border);object-fit:cover}
-.nav-badge{background:var(--accent);color:#fff;font-size:10px;padding:1px 5px;border-radius:10px;margin-left:-4px;margin-top:-8px}
-
-/* 子导航 */
 .sub-nav{background:#fff;border-bottom:1px solid var(--border);padding:0}
 .sub-nav-inner{display:flex;gap:0;overflow-x:auto}
 .sub-nav a{padding:10px 16px;font-size:13px;color:var(--text-light);white-space:nowrap;border-bottom:2px solid transparent;transition:0.2s}
 .sub-nav a:hover{color:var(--primary);text-decoration:none;background:var(--hover)}
 .sub-nav a.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:500}
-
-/* 主布局 */
 .main{display:grid;grid-template-columns:1fr 280px;gap:16px;padding:16px 0}
-
-/* 帖子列表 */
 .topic-list{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
 .topic-header{display:flex;align-items:center;padding:10px 16px;background:#fafafa;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-light)}
 .topic-header span{flex:1}
@@ -58,7 +97,7 @@ a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 .topic-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .topic-title:hover{color:var(--primary)}
 .topic-meta{display:flex;gap:8px;font-size:11px;color:var(--text-light)}
-.topic-meta .tag{padding:1px 6px;background:#f0f0f0;border-radius:3px;color:var(--text-light)}
+.topic-meta .tag{padding:1px 6px;background:#f0f0f0;border-radius:3px;color:var(--text-light);cursor:pointer}
 .topic-meta .tag:hover{background:var(--primary);color:#fff}
 .topic-author{width:100px;text-align:center;font-size:12px;color:var(--text-light);flex-shrink:0}
 .topic-author a{color:var(--text-link)}
@@ -67,14 +106,10 @@ a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 .topic-replies .count.zero{background:#e8e8e8;color:var(--text-light)}
 .topic-time{width:80px;text-align:right;font-size:11px;color:var(--text-light);flex-shrink:0}
 .topic-tags{display:flex;gap:4px;margin-top:4px}
-
-/* 侧边栏 */
 .sidebar{display:flex;flex-direction:column;gap:12px}
 .sb-card{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
 .sb-card-header{padding:10px 14px;background:#fafafa;border-bottom:1px solid var(--border);font-size:13px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:6px}
 .sb-card-body{padding:12px 14px}
-
-/* 用户卡片 */
 .user-card{text-align:center;padding:16px}
 .user-card img{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid var(--border)}
 .user-card .name{font-size:15px;font-weight:600;margin-top:8px}
@@ -86,31 +121,16 @@ a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 .checkin-btn{margin-top:12px;width:100%;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer;transition:0.2s}
 .checkin-btn:hover{background:var(--primary-dark)}
 .checkin-btn.done{background:#e8e8e8;color:var(--text-light);cursor:default}
-
-/* 统计 */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .stat-item{text-align:center;padding:8px;background:#f8f8f8;border-radius:6px}
 .stat-item .num{font-size:18px;font-weight:700;color:var(--primary)}
 .stat-item .lbl{font-size:11px;color:var(--text-light)}
-
-/* 公告 */
-.ann-item{padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px}
-.ann-item:last-child{border-bottom:none}
-.ann-item .title{color:var(--text);font-weight:500}
-.ann-item .title:hover{color:var(--primary)}
-.ann-item .time{font-size:11px;color:var(--text-light);margin-top:2px}
-
-/* 标签云 */
 .tag-list{display:flex;flex-wrap:wrap;gap:6px}
 .tag-item{padding:3px 10px;background:#f0f0f0;border-radius:4px;font-size:12px;color:var(--text-light);cursor:pointer;transition:0.2s}
 .tag-item:hover{background:var(--primary);color:#fff}
-
-/* 友链 */
 .link-item{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
 .link-item img{width:16px;height:16px;border-radius:3px}
 .link-item a{color:var(--text)}
-
-/* 弹窗 */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;justify-content:center;align-items:center}
 .modal-overlay.show{display:flex}
 .modal{background:#fff;border-radius:12px;width:90%;max-width:560px;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2)}
@@ -126,8 +146,6 @@ a{color:var(--text-link);text-decoration:none}a:hover{text-decoration:underline}
 textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 .form-btn{width:100%;padding:10px;background:var(--primary);color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:500;cursor:pointer;transition:0.2s}
 .form-btn:hover{background:var(--primary-dark)}
-
-/* 详情 */
 .detail-header{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .detail-header img{width:40px;height:40px;border-radius:50%;object-fit:cover}
 .detail-header .name{font-weight:600;font-size:14px}
@@ -138,8 +156,6 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 .detail-actions button{display:flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:var(--text-light);transition:0.2s}
 .detail-actions button:hover{border-color:var(--primary);color:var(--primary)}
 .detail-actions button.liked{color:var(--accent);border-color:var(--accent)}
-
-/* 评论 */
 .cmt{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f5f5f5}
 .cmt img{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0}
 .cmt-name{font-weight:600;font-size:13px;color:var(--primary)}
@@ -148,102 +164,25 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 .cmt-reply{color:var(--primary);cursor:pointer;margin-left:8px}
 .cmt-reply:hover{text-decoration:underline}
 .cmt-floor{color:var(--text-light);font-size:11px}
-
-/* 登录注册 */
-.auth-overlay{position:fixed;inset:0;z-index:1000;display:flex;overflow:hidden;background:#0a0a1a}
-.auth-overlay.hidden{display:none}
-/* 动态背景 */
-.auth-bg{position:absolute;inset:0;overflow:hidden}
-.auth-bg .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.6;animation:orbFloat 8s ease-in-out infinite}
-.auth-bg .orb:nth-child(1){width:400px;height:400px;background:#667eea;top:-10%;left:-5%;animation-delay:0s}
-.auth-bg .orb:nth-child(2){width:350px;height:350px;background:#764ba2;bottom:-10%;right:-5%;animation-delay:2s}
-.auth-bg .orb:nth-child(3){width:300px;height:300px;background:#f093fb;top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:4s}
-@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(30px,-30px) scale(1.1)}50%{transform:translate(-20px,20px) scale(0.9)}75%{transform:translate(20px,10px) scale(1.05)}}
-/* 网格线 */
-.auth-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px}
-/* 粒子 */
-.auth-particles{position:absolute;inset:0;pointer-events:none}
-.auth-particles span{position:absolute;width:3px;height:3px;background:rgba(255,255,255,0.4);border-radius:50%;animation:particleUp linear infinite}
-@keyframes particleUp{0%{transform:translateY(0) scale(0);opacity:0}50%{opacity:1}100%{transform:translateY(-100vh) scale(1);opacity:0}}
-/* 卡片容器 */
-.auth-container{position:relative;z-index:2;display:flex;width:900px;max-width:95vw;min-height:520px;border-radius:24px;overflow:hidden;box-shadow:0 25px 80px rgba(0,0,0,0.5);animation:authSlideIn 0.6s ease}
-@keyframes authSlideIn{from{opacity:0;transform:translateY(30px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-/* 左侧品牌区 */
-.auth-brand{flex:1;background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
-.auth-brand::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
-.auth-brand h1{font-size:32px;font-weight:800;color:#fff;margin-bottom:8px;position:relative}
-.auth-brand p{font-size:15px;color:rgba(255,255,255,0.85);line-height:1.6;position:relative}
-.auth-brand .brand-icon{font-size:48px;margin-bottom:16px;position:relative}
-.auth-brand .features{margin-top:24px;position:relative}
-.auth-brand .features div{display:flex;align-items:center;gap:8px;padding:6px 0;color:rgba(255,255,255,0.9);font-size:13px}
-.auth-brand .features i{color:#ffd700}
-/* 右侧表单区 */
-.auth-forms{flex:1;background:rgba(15,15,35,0.95);backdrop-filter:blur(20px);padding:48px 36px;display:flex;flex-direction:column;justify-content:center;position:relative}
-.auth-forms::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(102,126,234,0.1) 0%,transparent 50%);pointer-events:none;z-index:0}
-/* 标签切换 */
-.auth-tabs{display:flex;gap:0;margin-bottom:28px;position:relative;background:rgba(255,255,255,0.05);border-radius:12px;padding:4px}
-.auth-tab{flex:1;padding:10px;text-align:center;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;color:rgba(255,255,255,0.5);transition:0.3s;border:none;background:none}
-.auth-tab.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 4px 15px rgba(102,126,234,0.4)}
-/* 表单 */
-.auth-form{display:none;position:relative;z-index:1}
-.auth-form.active{display:block;animation:formFade 0.3s ease}
-@keyframes formFade{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
-.auth-form h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:4px}
-.auth-form .sub{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:24px}
-.auth-field{margin-bottom:16px;position:relative}
-.auth-field label{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,0.6);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
-.auth-field input{width:100%;padding:12px 14px 12px 42px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;color:#fff;font-size:14px;outline:none;transition:0.3s}
-.auth-field input::placeholder{color:rgba(255,255,255,0.25)}
-.auth-field input:focus{border-color:#667eea;background:rgba(255,255,255,0.1);box-shadow:0 0 0 4px rgba(102,126,234,0.15)}
-.auth-field .field-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.3);font-size:15px;transition:0.3s}
-.auth-field input:focus~.field-icon,.auth-field input:focus+.field-icon{color:#667eea}
-.auth-field .field-icon{top:calc(50% + 10px)}
-.auth-btn{width:100%;padding:13px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 4px 20px rgba(102,126,234,0.4);transition:0.3s;position:relative;overflow:hidden;margin-top:4px}
-.auth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(102,126,234,0.5)}
-.auth-btn:active{transform:translateY(0)}
-.auth-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);transition:0.5s}
-.auth-btn:hover::before{left:100%}
-.auth-links{display:flex;justify-content:space-between;margin-top:16px;position:relative}
-.auth-links a{color:rgba(255,255,255,0.5);font-size:12px;padding:6px 10px;border-radius:8px;transition:0.2s}
-.auth-links a:hover{color:#fff;background:rgba(255,255,255,0.05);text-decoration:none}
-/* 分隔线 */
-.auth-divider{display:flex;align-items:center;gap:12px;margin:20px 0;position:relative}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1)}
-.auth-divider span{font-size:11px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:1px}
-/* 社交登录 */
-.social-btns{display:flex;gap:10px;position:relative}
-.social-btn{flex:1;padding:10px;border:1px solid rgba(255,255,255,0.1);border-radius:12px;background:rgba(255,255,255,0.03);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;transition:0.2s}
-.social-btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2)}
-/* 移动端 */
-@media(max-width:768px){
-  .auth-container{flex-direction:column;min-height:auto}
-  .auth-brand{padding:32px 24px;min-height:160px}
-  .auth-brand h1{font-size:24px}
-  .auth-brand .features{display:none}
-  .auth-forms{padding:32px 24px}
-}
-#loginBox,#registerBox,#forgotBox{position:relative;width:100%}
-#registerBox,#forgotBox{display:none}
-
-/* Toast */
 #toastArea{position:fixed;top:60px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none}
 .toast{background:#fff;padding:10px 18px;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.12);font-size:13px;margin-bottom:6px;animation:fadeUp 0.3s;border-left:3px solid var(--primary)}
 .toast.err{border-left-color:var(--accent)}
-
-/* 分页 */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .pagination{display:flex;justify-content:center;gap:4px;padding:16px 0}
 .pagination button{padding:6px 12px;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;font-size:13px;color:var(--text)}
 .pagination button:hover{border-color:var(--primary);color:var(--primary)}
 .pagination button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-
-/* 移动端 */
 @media(max-width:768px){
   .main{grid-template-columns:1fr}
   .sidebar{order:-1}
   .topic-author,.topic-replies,.topic-time{display:none}
   .topic-header .w-author,.topic-header .w-replies,.topic-header .w-time{display:none}
   .nav-search{max-width:200px}
-  .auth-box{width:340px;padding:28px 24px}
+  .auth-container{flex-direction:column;min-height:auto}
+  .auth-brand{padding:32px 24px;min-height:160px}
+  .auth-brand h1{font-size:24px}
+  .auth-brand .features{display:none}
+  .auth-forms{padding:32px 24px}
 }
 </style>
 </head>
@@ -251,20 +190,16 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 
 <div id="toastArea"></div>
 
-<!-- 登录注册 -->
+<!-- 登录注册页面 -->
 <div class="auth-overlay" id="authPage">
-  <!-- 动态背景 -->
   <div class="auth-bg">
     <div class="orb"></div>
     <div class="orb"></div>
     <div class="orb"></div>
   </div>
   <div class="auth-grid"></div>
-  <div class="auth-particles" id="authParticles"></div>
 
-  <!-- 主卡片 -->
   <div class="auth-container">
-    <!-- 左侧品牌 -->
     <div class="auth-brand">
       <div class="brand-icon">🌸</div>
       <h1>YS工作室论坛</h1>
@@ -277,88 +212,102 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
       </div>
     </div>
 
-    <!-- 右侧表单 -->
     <div class="auth-forms">
-      <!-- 标签切换 -->
       <div class="auth-tabs">
-        <button class="auth-tab active" onclick="switchAuthTab('login',this)">登录</button>
-        <button class="auth-tab" onclick="switchAuthTab('register',this)">注册</button>
+        <button class="auth-tab active" onclick="switchTab('login')">登录</button>
+        <button class="auth-tab" onclick="switchTab('register')">注册</button>
       </div>
 
       <!-- 登录表单 -->
-      <div class="auth-form active" id="loginBox">
+      <div class="auth-form active" id="loginForm">
         <h2>欢迎回来 👋</h2>
         <p class="sub">登录你的账号继续</p>
         <div class="auth-field">
           <label>用户名</label>
-          <input type="text" id="loginUser" placeholder="请输入用户名">
-          <i class="fa-solid fa-user field-icon"></i>
+          <div class="input-wrap">
+            <input type="text" id="loginUser" placeholder="请输入用户名">
+            <i class="fa-solid fa-user field-icon"></i>
+          </div>
         </div>
         <div class="auth-field">
           <label>密码</label>
-          <input type="password" id="loginPass" placeholder="请输入密码">
-          <i class="fa-solid fa-lock field-icon"></i>
+          <div class="input-wrap">
+            <input type="password" id="loginPass" placeholder="请输入密码">
+            <i class="fa-solid fa-lock field-icon"></i>
+          </div>
         </div>
         <button class="auth-btn" onclick="doLogin()">登 录</button>
         <div class="auth-links">
-          <a href="#" onclick="switchAuthTab('register');return false">注册账号</a>
-          <a href="#" onclick="showForgot();return false">忘记密码？</a>
+          <a href="#" onclick="switchTab('register');return false">注册账号</a>
+          <a href="#" onclick="switchTab('forgot');return false">忘记密码？</a>
         </div>
         <div class="auth-divider"><span>其他方式</span></div>
         <div class="social-btns">
-          <button class="social-btn"><i class="fab fa-qq"></i> QQ</button>
-          <button class="social-btn"><i class="fab fa-weixin"></i> 微信</button>
-          <button class="social-btn"><i class="fab fa-github"></i> GitHub</button>
+          <button class="social-btn" onclick="toast('QQ登录暂未开放')"><i class="fab fa-qq"></i> QQ</button>
+          <button class="social-btn" onclick="toast('微信登录暂未开放')"><i class="fab fa-weixin"></i> 微信</button>
+          <button class="social-btn" onclick="toast('GitHub登录暂未开放')"><i class="fab fa-github"></i> GitHub</button>
         </div>
       </div>
 
       <!-- 注册表单 -->
-      <div class="auth-form" id="registerBox">
+      <div class="auth-form" id="registerForm">
         <h2>创建账号 ✨</h2>
         <p class="sub">加入我们的社区</p>
         <div class="auth-field">
           <label>用户名</label>
-          <input type="text" id="regUser" placeholder="3-20个字符">
-          <i class="fa-solid fa-user field-icon"></i>
+          <div class="input-wrap">
+            <input type="text" id="regUser" placeholder="3-20个字符">
+            <i class="fa-solid fa-user field-icon"></i>
+          </div>
         </div>
         <div class="auth-field">
           <label>昵称</label>
-          <input type="text" id="regNick" placeholder="你的显示名称">
-          <i class="fa-solid fa-id-card field-icon"></i>
+          <div class="input-wrap">
+            <input type="text" id="regNick" placeholder="你的显示名称">
+            <i class="fa-solid fa-id-card field-icon"></i>
+          </div>
         </div>
         <div class="auth-field">
           <label>密码</label>
-          <input type="password" id="regPass" placeholder="至少6位">
-          <i class="fa-solid fa-lock field-icon"></i>
+          <div class="input-wrap">
+            <input type="password" id="regPass" placeholder="至少6位">
+            <i class="fa-solid fa-lock field-icon"></i>
+          </div>
         </div>
         <div class="auth-field">
           <label>确认密码</label>
-          <input type="password" id="regConfirm" placeholder="再次输入密码">
-          <i class="fa-solid fa-shield-halved field-icon"></i>
+          <div class="input-wrap">
+            <input type="password" id="regConfirm" placeholder="再次输入密码">
+            <i class="fa-solid fa-shield-halved field-icon"></i>
+          </div>
         </div>
         <button class="auth-btn" onclick="doRegister()">注 册</button>
         <div class="auth-links">
-          <a href="#" onclick="switchAuthTab('login');return false">已有账号？去登录</a>
+          <a href="#" onclick="switchTab('login');return false">已有账号？去登录</a>
         </div>
       </div>
 
       <!-- 忘记密码 -->
-      <div class="auth-form" id="forgotBox">
+      <div class="auth-form" id="forgotForm">
         <h2>重置密码 🔑</h2>
         <p class="sub">输入用户名和新密码</p>
         <div class="auth-field">
           <label>用户名</label>
-          <input type="text" id="forgotUser" placeholder="请输入用户名">
-          <i class="fa-solid fa-user field-icon"></i>
+          <div class="input-wrap">
+            <input type="text" id="forgotUser" placeholder="请输入用户名">
+            <i class="fa-solid fa-user field-icon"></i>
+          </div>
         </div>
         <div class="auth-field">
           <label>新密码</label>
-          <input type="password" id="forgotPass" placeholder="至少6位">
-          <i class="fa-solid fa-lock field-icon"></i>
+          <div class="input-wrap">
+            <input type="password" id="forgotPass" placeholder="至少6位">
+            <i class="fa-solid fa-lock field-icon"></i>
+          </div>
         </div>
         <button class="auth-btn" onclick="doForgotPassword()">重置密码</button>
         <div class="auth-links">
-          <a href="#" onclick="switchAuthTab('login');return false">返回登录</a>
+          <a href="#" onclick="switchTab('login');return false">返回登录</a>
         </div>
       </div>
     </div>
@@ -367,7 +316,6 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
 
 <!-- 主页面 -->
 <div id="mainPage" style="display:none">
-  <!-- 导航栏 -->
   <nav class="navbar">
     <div class="container navbar-inner">
       <a href="/" class="logo"><span>🌸</span> YS论坛</a>
@@ -383,24 +331,19 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
     </div>
   </nav>
 
-  <!-- 子导航 -->
   <div class="sub-nav">
     <div class="container sub-nav-inner" id="forumTabs">
       <a href="#" class="active" onclick="setForum('',this);return false">全部</a>
     </div>
   </div>
 
-  <!-- 主内容 -->
   <div class="container main">
-    <!-- 左侧帖子列表 -->
     <div>
-      <!-- 公告 -->
       <div id="annBar" style="display:none;background:#fffbe6;border:1px solid #ffe58f;border-radius:var(--radius);padding:10px 16px;margin-bottom:12px;font-size:13px;display:flex;align-items:center;gap:8px">
         <i class="fa-solid fa-bullhorn" style="color:#faad14"></i>
         <marquee id="annMarquee" style="flex:1">欢迎来到YS工作室论坛 🌸</marquee>
       </div>
 
-      <!-- 排序 -->
       <div style="display:flex;gap:4px;margin-bottom:12px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:4px">
         <button class="sort-btn active" onclick="setSort('latest',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:var(--primary);color:#fff;cursor:pointer;font-size:13px">最新</button>
         <button class="sort-btn" onclick="setSort('hot',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:none;color:var(--text-light);cursor:pointer;font-size:13px">最热</button>
@@ -408,7 +351,6 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         <button class="sort-btn" onclick="setSort('essence',this)" style="flex:1;padding:7px 0;border:none;border-radius:6px;background:none;color:var(--text-light);cursor:pointer;font-size:13px">精华</button>
       </div>
 
-      <!-- 帖子列表 -->
       <div class="topic-list">
         <div class="topic-header">
           <span class="w-title">主题</span>
@@ -423,9 +365,7 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
       <div class="pagination" id="pagination"></div>
     </div>
 
-    <!-- 右侧边栏 -->
     <div class="sidebar">
-      <!-- 用户卡片 -->
       <div class="sb-card" id="userCard" style="display:none">
         <div class="sb-card-body user-card">
           <img id="sbAvatar" src="/img/default-avatar.png">
@@ -440,7 +380,6 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         </div>
       </div>
 
-      <!-- 站点统计 -->
       <div class="sb-card">
         <div class="sb-card-header"><i class="fa-solid fa-chart-pie"></i> 站点统计</div>
         <div class="sb-card-body">
@@ -453,13 +392,11 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         </div>
       </div>
 
-      <!-- 公告 -->
       <div class="sb-card">
         <div class="sb-card-header"><i class="fa-solid fa-bullhorn"></i> 公告</div>
         <div class="sb-card-body" id="sbAnn"><p style="color:var(--text-light);font-size:12px">暂无公告</p></div>
       </div>
 
-      <!-- 热门标签 -->
       <div class="sb-card">
         <div class="sb-card-header"><i class="fa-solid fa-tags"></i> 热门标签</div>
         <div class="sb-card-body">
@@ -467,13 +404,11 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         </div>
       </div>
 
-      <!-- 友情链接 -->
       <div class="sb-card">
         <div class="sb-card-header"><i class="fa-solid fa-link"></i> 友情链接</div>
         <div class="sb-card-body" id="friendLinks"><p style="color:var(--text-light);font-size:12px">暂无</p></div>
       </div>
 
-      <!-- 反馈 -->
       <div class="sb-card">
         <div class="sb-card-header"><i class="fa-solid fa-comment-dots"></i> 意见反馈</div>
         <div class="sb-card-body">
@@ -483,7 +418,6 @@ textarea.form-input{min-height:120px;resize:vertical;font-family:inherit}
         </div>
       </div>
 
-      <!-- 底部 -->
       <div style="text-align:center;font-size:11px;color:var(--text-light);padding:8px">© 2026 YS工作室论坛</div>
     </div>
   </div>
@@ -566,30 +500,21 @@ function api(method,path,data,cb){
   r.onerror=function(){cb('网络错误');};r.send(data?JSON.stringify(data):null);
 }
 
-// 登录注册标签切换
-function switchAuthTab(tab,btn){
+// 标签切换
+function switchTab(tab){
   document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('active');});
   document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
-  if(tab==='login'){$('loginBox').classList.add('active');document.querySelectorAll('.auth-tab')[0].classList.add('active');}
-  else if(tab==='register'){$('registerBox').classList.add('active');document.querySelectorAll('.auth-tab')[1].classList.add('active');}
-  else if(tab==='forgot'){$('forgotBox').classList.add('active');}
+  if(tab==='login'){$('loginForm').classList.add('active');document.querySelectorAll('.auth-tab')[0].classList.add('active');}
+  else if(tab==='register'){$('registerForm').classList.add('active');document.querySelectorAll('.auth-tab')[1].classList.add('active');}
+  else if(tab==='forgot'){$('forgotForm').classList.add('active');}
 }
-function showForgot(){
-  document.querySelectorAll('.auth-tab').forEach(function(t){t.classList.remove('active');});
-  document.querySelectorAll('.auth-form').forEach(function(f){f.classList.remove('active');});
-  $('forgotBox').classList.add('active');
-}
-function showLogin(){switchAuthTab('login');}
-function showReg(){switchAuthTab('register');}
-// 生成粒子
-(function(){var c=document.getElementById('authParticles');if(!c)return;for(var i=0;i<20;i++){var s=document.createElement('span');s.style.cssText='left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation-duration:'+(4+Math.random()*6)+'s;animation-delay:'+Math.random()*5+'s;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px';c.appendChild(s);}})();
 
 function doLogin(){
   var u=$('loginUser').value.trim(),p=$('loginPass').value;
   if(!u||!p){toast('请输入账号密码');return;}
   api('POST','/api/auth/login',{username:u,password:p},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);enterSite();
+    TOKEN=d.token;USER=d.user;localStorage.setIteme();
   });
 }
 
@@ -600,7 +525,7 @@ function doRegister(){
   if(p!==c){toast('两次密码不一致');return;}
   api('POST','/api/auth/register',{username:u,password:p,nickname:n},function(err,d){
     if(err){toast(err);return;}
-    TOKEN=d.token;USER=d.user;localStorage.setItem('token',TOKEN);toast('注册成功 🌸',true);enterSite();
+    TOKEN=d.token;USER=d.user;localStorage.setItem注册成功 🌸',true);enterSite();
   });
 }
 
@@ -610,11 +535,11 @@ function doForgotPassword(){
   if(p.length<6){toast('密码至少6位');return;}
   api('POST','/api/auth/forgot-password',{username:u,newPassword:p},function(err,d){
     if(err){toast(err);return;}
-    toast('密码已重置，请登录',true);showLogin();
+    toast('密码已重置，请登录',true);switchTab('login');
   });
 }
 
-function doLogout(){TOKEN=null;USER=null;localStorage.removeItem('token');location.reload();}
+function doLogout(){TOKEN=null;USER=null;localStoragetem('token');location.reload();}
 
 function enterSite(){
   $('authPage').classList.add('hidden');
@@ -642,7 +567,6 @@ function doCheckin(){
   });
 }
 
-// 板块
 function loadForums(){
   api('GET','/api/posts/forums',null,function(err,d){
     if(err)return;
@@ -670,7 +594,6 @@ function setSort(sort,btn){
   loadPosts(true);
 }
 
-// 帖子
 function loadPosts(reset){
   if(LOADING)return;if(reset){PAGE=1;HASMORE=true;$('topicsArea').innerHTML='';}
   if(!HASMORE)return;LOADING=true;$('loading').style.display='block';$('empty').style.display='none';
@@ -720,7 +643,6 @@ function makeTopic(p){
 function searchTag(tag){$('searchInput').value=tag;SEARCH=tag;loadPosts(true);}
 function doSearch(){SEARCH=$('searchInput').value.trim();loadPosts(true);}
 
-// 详情
 function openDetail(id){
   api('GET','/api/posts/'+id,null,function(err,d){
     if(err){toast('加载失败');return;}
@@ -774,7 +696,6 @@ function doPost(){
 
 function startChat(userId){api('POST','/api/chat/conversations',{userId:userId},function(err,d){if(err){toast('无法发起私信');return;}location.href='/chat?id='+d.conversation.id;});}
 
-// 个人资料
 function openProfile(){
   if(!USER)return;
   $('pAvatar').src=USER.avatar||'/img/default-avatar.png';$('pName').textContent=USER.nickname;$('pBio').textContent=USER.bio||'';
@@ -783,7 +704,6 @@ function openProfile(){
 function doSaveProfile(){var n=$('eNick').value.trim(),b=$('eBio').value.trim();if(!n){toast('昵称不能为空');return;}api('PUT','/api/auth/profile',{nickname:n,bio:b},function(err,d){if(err){toast(err);return;}USER=d.user;toast('已保存',true);$('topAvatar').src=USER.avatar||'/img/default-avatar.png';$('sbName').textContent=USER.nickname;});}
 function doChangePwd(){var o=$('eOldPwd').value,n=$('eNewPwd').value;if(!o||!n){toast('请输入密码');return;}if(n.length<6){toast('新密码至少6位');return;}api('PUT','/api/auth/password',{oldPassword:o,newPassword:n},function(err){if(err){toast(err);return;}toast('密码已修改',true);$('eOldPwd').value='';$('eNewPwd').value='';});}
 
-// 侧边栏
 function loadSidebar(){
   api('GET','/api/posts?limit=1',null,function(err,d){if(!err){$('sPosts').textContent=d.pagination.total;$('sComments').textContent=d.pagination.total*3;}});
   api('GET','/api/posts/meta/tags',null,function(err,d){if(err||!d.tags.length)return;var h='';d.tags.forEach(function(t){h+='<span class="tag-item" onclick="searchTag(\''+esc(t.name)+'\')">#'+esc(t.name)+' ('+t.count+')</span>';});$('tagCloud').innerHTML=h;});
@@ -794,7 +714,7 @@ function loadAnnouncements(){
   api('GET','/api/announcements?limit=5',null,function(err,d){
     if(err||!d.announcements.length)return;
     var icons={info:'📢',urgent:'🚨',update:'✨'};var html='';var mq='';
-    d.announcements.forEach(function(a){html+='<div class="ann-item"><div class="title">'+(icons[a.type]||'📢')+' '+esc(a.title)+'</div><div class="time">'+esc(a.content).substring(0,60)+'</div></div>';mq+=(icons[a.type]||'📢')+' '+a.title+': '+a.content+'　　　';});
+    d.announcements.forEach(function(a){html+='<div style="padding:8px 0;border-bottom:1px solid #f0f0f0;font-size:13px"><div style="font-weight:500">'+(icons[a.type]||'📢')+' '+esc(a.title)+'</div><div style="font-size:12px;color:var(--text-light);margin-top:2px">'+esc(a.content).substring(0,60)+'</div></div>';mq+=(icons[a.type]||'📢')+' '+a.title+': '+a.content+'　　　';});
     $('sbAnn').innerHTML=html;$('annMarquee').textContent=mq;$('annBar').style.display='flex';
   });
 }
@@ -812,17 +732,15 @@ function loadPopupAnn(){
 
 function submitFeedback(){var content=$('fbContent').value.trim(),contact=$('fbContact').value.trim();if(!content){toast('请输入反馈内容');return;}api('POST','/api/feedback',{content:content,contact:contact},function(err){if(err){toast(err);return;}toast('反馈已提交',true);$('fbContent').value='';$('fbContact').value='';});}
 
-// 分页
 function renderPag(pag){var c=$('pagination');if(!pag||pag.totalPages<=1){c.innerHTML='';return;}var h='';if(pag.page>1)h+='<button onclick="goPage('+(pag.page-1)+')">上一页</button>';
   for(var i=Math.max(1,pag.page-2);i<=Math.min(pag.totalPages,pag.page+2);i++){var active=i===pag.page;h+='<button class="'+(active?'active':'')+'" onclick="goPage('+i+')">'+i+'</button>';}
   if(pag.page<pag.totalPages)h+='<button onclick="goPage('+(pag.page+1)+')">下一页</button>';
   c.innerHTML=h;}
 function goPage(p){PAGE=p;loadPosts(true);window.scrollTo({top:0,behavior:'smooth'});}
 
-// 初始化
 if(TOKEN){
   api('GET','/api/auth/me',null,function(err,d){
-    if(err||!d.user){localStorage.removeItem('token');TOKEN=null;return;}
+    if(err||!d.user){localStorage.removeItem('token');TOKEN=***
     USER=d.user;enterSite();
   });
 }
